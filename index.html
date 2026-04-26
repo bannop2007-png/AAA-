@@ -3,26 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Landing</title>
+<title>Premium Site</title>
 
-<meta name="description" content="Премиум сайт для бизнеса">
+<meta name="description" content="Премиум сайт">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
-body {
+* {
   margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: Arial, sans-serif;
-  background: #0b0b12;
-  color: #fff;
 }
 
+body {
+  background: linear-gradient(135deg,#0a0a0f,#111827);
+  color: #fff;
+  overflow-x: hidden;
+}
+
+/* Loader */
+#loader {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  font-size: 24px;
+}
+
+/* Container */
 .container {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: auto;
   padding: 20px;
 }
 
+/* Hero */
 .hero {
   height: 100vh;
   display: flex;
@@ -37,14 +58,20 @@ h1 {
   color: transparent;
 }
 
+p {
+  margin: 20px 0;
+  opacity: 0.8;
+}
+
+/* Button */
 button {
   padding: 15px 30px;
   border: none;
   border-radius: 10px;
   background: linear-gradient(45deg,#00f,#0ff);
-  color: #fff;
+  color: white;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
 }
 
 button:hover {
@@ -52,10 +79,12 @@ button:hover {
   box-shadow: 0 0 20px #0ff;
 }
 
+/* Sections */
 .section {
   padding: 80px 0;
 }
 
+/* Cards */
 .cards {
   display: flex;
   gap: 20px;
@@ -71,61 +100,111 @@ button:hover {
   backdrop-filter: blur(10px);
 }
 
+/* Form */
 input, textarea {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   margin-top: 10px;
   border-radius: 8px;
   border: none;
+  outline: none;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 30px;
+  opacity: 0.5;
+}
+
+/* Mobile */
+@media(max-width:768px){
+  h1 { font-size: 32px; }
 }
 </style>
 </head>
 
 <body>
 
+<div id="loader">Загрузка...</div>
+
 <div class="container hero">
   <h1 class="title">Создаем сайты, которые продают</h1>
-  <p>Премиум дизайн + максимальная конверсия</p>
+  <p>Премиум дизайн + высокая конверсия</p>
   <button onclick="scrollToForm()">Оставить заявку</button>
 </div>
 
 <div class="container section">
   <h2>Преимущества</h2>
   <div class="cards">
-    <div class="card">🚀 Быстро</div>
-    <div class="card">💎 Премиум дизайн</div>
+    <div class="card">🚀 Быстрая загрузка</div>
+    <div class="card">💎 Дорогой дизайн</div>
     <div class="card">📈 Рост продаж</div>
   </div>
 </div>
 
 <div class="container section">
   <h2>Отзывы</h2>
-  <p>“Сайт окупился за 2 недели”</p>
+  <p>“Сайт реально начал приносить клиентов”</p>
 </div>
 
 <div class="container section" id="form">
   <h2>Оставить заявку</h2>
-  <input placeholder="Имя">
-  <input placeholder="Телефон">
-  <textarea placeholder="Сообщение"></textarea>
+  <input id="name" placeholder="Имя">
+  <input id="phone" placeholder="Телефон">
+  <textarea id="msg" placeholder="Сообщение"></textarea>
   <button onclick="send()">Отправить</button>
 </div>
 
+<footer>
+  © 2026 Premium Site
+</footer>
+
 <script>
 
+/* Loader */
+window.onload = () => {
+  gsap.to("#loader", {
+    opacity: 0,
+    duration: 1,
+    onComplete: () => {
+      document.getElementById("loader").style.display = "none";
+    }
+  });
+};
+
+/* Animations */
 gsap.from(".title", {
   opacity: 0,
   y: 100,
   duration: 1.5
 });
 
+/* Scroll */
 function scrollToForm(){
-  document.getElementById("form").scrollIntoView({behavior:"smooth"});
+  document.getElementById("form").scrollIntoView({
+    behavior: "smooth"
+  });
 }
 
+/* Form */
 function send(){
+  let name = document.getElementById("name").value;
+  let phone = document.getElementById("phone").value;
+
+  if(name === "" || phone === ""){
+    alert("Заполни имя и телефон");
+    return;
+  }
+
   alert("Заявка отправлена!");
 }
+
+/* Parallax */
+window.addEventListener("scroll", () => {
+  document.body.style.backgroundPositionY =
+    window.scrollY * 0.3 + "px";
+});
 
 </script>
 
