@@ -3,135 +3,129 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AAA Site</title>
+<title>Premium Landing</title>
+
+<meta name="description" content="Премиум сайт для бизнеса">
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
 <style>
 body {
   margin: 0;
-  font-family: Arial;
-  background: #0a0a0f;
-  color: white;
-  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+  background: #0b0b12;
+  color: #fff;
 }
 
-/* Loader */
-#loader {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: black;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+.container {
+  max-width: 1200px;
+  margin: auto;
+  padding: 20px;
 }
 
-.glow {
-  color: #0ff;
-  text-shadow: 0 0 20px #0ff;
-}
-
-/* Hero */
 .hero {
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  text-align: center;
+  justify-content: center;
+}
+
+h1 {
+  font-size: 48px;
+  background: linear-gradient(90deg,#00f,#0ff);
+  -webkit-background-clip: text;
+  color: transparent;
 }
 
 button {
-  padding: 15px 40px;
+  padding: 15px 30px;
   border: none;
-  background: linear-gradient(45deg, #00f, #0ff);
-  color: white;
   border-radius: 10px;
+  background: linear-gradient(45deg,#00f,#0ff);
+  color: #fff;
   cursor: pointer;
-  transition: 0.3s;
+  transition: .3s;
 }
 
 button:hover {
-  transform: scale(1.1);
+  transform: scale(1.05);
   box-shadow: 0 0 20px #0ff;
 }
 
-/* Sections */
 .section {
-  padding: 100px 20px;
-  text-align: center;
+  padding: 80px 0;
 }
 
-/* Glass */
+.cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 .card {
+  flex: 1;
+  min-width: 250px;
+  padding: 20px;
+  border-radius: 15px;
   background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(20px);
-  margin: 20px;
-  padding: 30px;
-  border-radius: 20px;
-  display: inline-block;
+  backdrop-filter: blur(10px);
+}
+
+input, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 8px;
+  border: none;
 }
 </style>
 </head>
 
 <body>
 
-<div id="loader"><h1 class="glow">LOADING...</h1></div>
-
-<div class="hero">
-  <h1 class="glow title">AAA EXPERIENCE</h1>
-  <button onclick="scrollToNext()">START</button>
+<div class="container hero">
+  <h1 class="title">Создаем сайты, которые продают</h1>
+  <p>Премиум дизайн + максимальная конверсия</p>
+  <button onclick="scrollToForm()">Оставить заявку</button>
 </div>
 
-<div class="section">
-  <h2>Features</h2>
-  <div class="card">Ultra Graphics</div>
-  <div class="card">Smooth Animations</div>
-  <div class="card">AAA UX</div>
+<div class="container section">
+  <h2>Преимущества</h2>
+  <div class="cards">
+    <div class="card">🚀 Быстро</div>
+    <div class="card">💎 Премиум дизайн</div>
+    <div class="card">📈 Рост продаж</div>
+  </div>
 </div>
 
-<div class="section">
-  <h2>Showcase</h2>
-  <p>Next-gen experience</p>
+<div class="container section">
+  <h2>Отзывы</h2>
+  <p>“Сайт окупился за 2 недели”</p>
 </div>
 
-<div class="section">
-  <h2>Join Now</h2>
-  <button onclick="alert('Started!')">Play</button>
+<div class="container section" id="form">
+  <h2>Оставить заявку</h2>
+  <input placeholder="Имя">
+  <input placeholder="Телефон">
+  <textarea placeholder="Сообщение"></textarea>
+  <button onclick="send()">Отправить</button>
 </div>
 
 <script>
 
-// Loader
-window.onload = () => {
-  gsap.to("#loader", {
-    opacity: 0,
-    duration: 1,
-    onComplete: () => document.getElementById("loader").style.display = "none"
-  });
-};
-
-// Animations
 gsap.from(".title", {
   opacity: 0,
   y: 100,
   duration: 1.5
 });
 
-// Scroll
-function scrollToNext() {
-  window.scrollTo({
-    top: window.innerHeight,
-    behavior: "smooth"
-  });
+function scrollToForm(){
+  document.getElementById("form").scrollIntoView({behavior:"smooth"});
 }
 
-// Parallax
-window.addEventListener("scroll", () => {
-  document.body.style.backgroundPositionY = window.scrollY * 0.5 + "px";
-});
+function send(){
+  alert("Заявка отправлена!");
+}
 
 </script>
 
