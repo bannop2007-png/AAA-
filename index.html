@@ -1,740 +1,679 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Velvet Drive | Элитный автопрокат</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>NIGHTMARE OPERATOR | Тактический шутер</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
 
-<!-- Google Fonts + Font Awesome -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        body {
+            background: radial-gradient(circle at 20% 30%, #03050b, #000000);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Inter', 'Orbitron', monospace;
+            overflow: hidden;
+            margin: 0;
+            padding: 20px;
+        }
 
-<!-- GSAP Core + ScrollTrigger -->
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+        /* игровой контейнер */
+        .game-container {
+            position: relative;
+            border-radius: 28px;
+            box-shadow: 0 25px 40px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(212, 175, 55, 0.2);
+            background: #0a0c14;
+        }
 
-<style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+        canvas {
+            display: block;
+            margin: 0 auto;
+            border-radius: 24px;
+            cursor: crosshair;
+            box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.5);
+        }
 
-  body {
-    font-family: 'Inter', sans-serif;
-    background: #030303;
-    color: #F5F5F5;
-    overflow-x: hidden;
-    scroll-behavior: smooth;
-  }
+        /* HUD — панель stats */
+        .hud {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            pointer-events: none;
+            font-family: 'Orbitron', 'Inter', monospace;
+            text-shadow: 0 0 4px #00a6ff40;
+        }
 
-  /* custom scroll */
-  ::-webkit-scrollbar {
-    width: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: #111;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: #D4AF37;
-    border-radius: 10px;
-  }
+        .stats {
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(10px);
+            padding: 10px 20px;
+            border-radius: 60px;
+            border-left: 3px solid #f0b90b;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
 
-  .container {
-    max-width: 1350px;
-    margin: 0 auto;
-    padding: 0 30px;
-  }
+        .stats span {
+            color: #f5c542;
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-right: 8px;
+        }
 
-  /* ---------- HEADER (LUXURY GLASS) ---------- */
-  .header {
-    position: fixed;
-    width: 100%;
-    top: 0;
-    z-index: 1050;
-    padding: 18px 24px;
-    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  }
-  .header.scrolled {
-    background: rgba(5, 5, 10, 0.85);
-    backdrop-filter: blur(16px);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-  }
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .logo {
-    font-family: 'Playfair Display', serif;
-    font-weight: 800;
-    font-size: 26px;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, #D4AF37 0%, #F9E076 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 8px rgba(212,175,55,0.3);
-    transition: 0.3s;
-  }
-  .nav-links {
-    display: flex;
-    gap: 2.5rem;
-    list-style: none;
-  }
-  .nav-links a {
-    color: #fff;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 0.95rem;
-    letter-spacing: 0.5px;
-    transition: 0.25s;
-    position: relative;
-  }
-  .nav-links a:after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: #D4AF37;
-    transition: 0.3s;
-  }
-  .nav-links a:hover:after {
-    width: 100%;
-  }
-  .nav-links a:hover {
-    color: #D4AF37;
-  }
-  .burger {
-    display: none;
-    cursor: pointer;
-    font-size: 26px;
-    color: #D4AF37;
-    transition: 0.2s;
-  }
+        .stats .label {
+            color: #bbb;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
 
-  /* ---------- HERO SECTION (cinematic) ---------- */
-  .hero {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    position: relative;
-    isolation: isolate;
-    background: radial-gradient(circle at 80% 30%, rgba(0,0,0,0.7) 0%, #030303 95%);
-  }
-  .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: url('https://images.pexels.com/photos/2162102/pexels-photo-2162102.jpeg?auto=compress&cs=tinysrgb&w=1600') no-repeat center center/cover;
-    opacity: 0.2;
-    z-index: -2;
-    filter: blur(2px);
-  }
-  .hero::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(125deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 100%);
-    z-index: -1;
-  }
-  .hero-content {
-    max-width: 700px;
-    padding: 30px 0;
-  }
-  .hero-content h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3rem, 8vw, 5.2rem);
-    font-weight: 800;
-    line-height: 1.1;
-    background: linear-gradient(to right, #FFFFFF, #D4AF37, #F9E076);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    margin-bottom: 1.2rem;
-  }
-  .hero-content p {
-    font-size: 1.2rem;
-    opacity: 0.85;
-    margin-bottom: 2rem;
-    letter-spacing: 0.3px;
-    border-left: 3px solid #D4AF37;
-    padding-left: 20px;
-  }
-  .btn-gold {
-    background: linear-gradient(95deg, #D4AF37 0%, #C2A030 100%);
-    border: none;
-    padding: 14px 36px;
-    font-weight: 700;
-    font-size: 1rem;
-    cursor: pointer;
-    color: #0A0A0C;
-    border-radius: 40px;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 15px rgba(212,175,55,0.3);
-    letter-spacing: 0.5px;
-  }
-  .btn-gold:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 12px 28px rgba(212,175,55,0.5);
-    background: linear-gradient(95deg, #E5C247 0%, #D4AF37 100%);
-  }
+        .restart-btn {
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #f5b81b;
+            color: #f5b81b;
+            padding: 8px 22px;
+            border-radius: 60px;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
 
-  /* section common */
-  section {
-    padding: 100px 0;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.8rem;
-    margin-bottom: 50px;
-    position: relative;
-    display: inline-block;
-    font-weight: 700;
-  }
-  .section-title:after {
-    content: '';
-    position: absolute;
-    bottom: -12px;
-    left: 0;
-    width: 70px;
-    height: 3px;
-    background: #D4AF37;
-    border-radius: 2px;
-  }
+        .restart-btn:hover {
+            background: #f5b81b;
+            color: #0a0c14;
+            box-shadow: 0 0 12px #f5b81b;
+            transform: scale(1.02);
+        }
 
-  /* CAR GRID - LUXURY CARDS */
-  .cars-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-    gap: 35px;
-  }
-  .card {
-    background: rgba(18, 18, 24, 0.85);
-    backdrop-filter: blur(2px);
-    border-radius: 28px;
-    padding: 20px 20px 28px;
-    transition: all 0.4s cubic-bezier(0.2, 0.9, 0.6, 1.1);
-    border: 1px solid rgba(212, 175, 55, 0.2);
-    box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
-  }
-  .card:hover {
-    transform: translateY(-12px) scale(1.02);
-    border-color: rgba(212, 175, 55, 0.6);
-    box-shadow: 0 30px 40px -10px rgba(0,0,0,0.7);
-    background: #121218;
-  }
-  .card-img {
-    width: 100%;
-    height: 210px;
-    object-fit: cover;
-    border-radius: 20px;
-    transition: transform 0.5s;
-  }
-  .card:hover .card-img {
-    transform: scale(1.02);
-  }
-  .card h3 {
-    font-size: 1.9rem;
-    font-weight: 700;
-    margin-top: 18px;
-    font-family: 'Playfair Display', serif;
-  }
-  .car-meta {
-    display: flex;
-    justify-content: space-between;
-    margin: 12px 0 8px;
-    color: #bbb;
-    font-size: 14px;
-  }
-  .price {
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: #D4AF37;
-    margin: 12px 0;
-  }
-  .price small {
-    font-size: 0.9rem;
-    font-weight: 400;
-    color: #aaa;
-  }
-  .btn-outline {
-    background: transparent;
-    border: 1.5px solid #D4AF37;
-    padding: 10px 22px;
-    border-radius: 40px;
-    color: #D4AF37;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-    width: 100%;
-    font-size: 0.9rem;
-  }
-  .btn-outline:hover {
-    background: #D4AF37;
-    color: #0A0A0C;
-    box-shadow: 0 0 12px rgba(212,175,55,0.6);
-  }
+        .wave-badge {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-weight: bold;
+            color: #ffd966;
+        }
 
-  /* FEATURES SECTION (ELITE SERVICE) */
-  .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 30px;
-    margin-top: 20px;
-  }
-  .feature-item {
-    background: rgba(20, 20, 28, 0.7);
-    backdrop-filter: blur(4px);
-    padding: 34px 24px;
-    text-align: center;
-    border-radius: 30px;
-    border: 1px solid rgba(212,175,55,0.2);
-    transition: 0.3s;
-  }
-  .feature-item i {
-    font-size: 2.5rem;
-    color: #D4AF37;
-    margin-bottom: 20px;
-  }
-  .feature-item h4 {
-    font-size: 1.5rem;
-    margin-bottom: 12px;
-    font-weight: 600;
-  }
-  .feature-item p {
-    color: #c0c0c0;
-    font-size: 0.9rem;
-  }
+        .controls-hint {
+            position: absolute;
+            bottom: 16px;
+            left: 20px;
+            background: rgba(0,0,0,0.55);
+            backdrop-filter: blur(5px);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            color: #ccc;
+            pointer-events: none;
+            font-family: monospace;
+        }
 
-  /* CONTACT / FOOTER LUXURY */
-  .footer {
-    background: #060608;
-    border-top: 1px solid rgba(212,175,55,0.25);
-    padding: 50px 0 30px;
-  }
-  .footer-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 30px;
-    margin-bottom: 40px;
-  }
-  .footer-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #D4AF37, #E8D07A);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  .footer-social a {
-    color: #D4AF37;
-    font-size: 22px;
-    margin-left: 20px;
-    transition: 0.2s;
-  }
-  .footer-social a:hover {
-    color: white;
-    transform: translateY(-3px);
-  }
-  .footer-copy {
-    text-align: center;
-    font-size: 0.8rem;
-    opacity: 0.6;
-    margin-top: 30px;
-  }
-  
-  /* responsive */
-  @media (max-width: 900px) {
-    .container {
-      padding: 0 24px;
-    }
-    .nav-links {
-      position: fixed;
-      top: 0;
-      right: -100%;
-      width: 75%;
-      height: 100vh;
-      background: rgba(5, 5, 10, 0.95);
-      backdrop-filter: blur(20px);
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      transition: 0.4s ease-out;
-      gap: 2rem;
-      z-index: 1100;
-      box-shadow: -10px 0 30px rgba(0,0,0,0.7);
-      border-left: 1px solid #D4AF37;
-    }
-    .nav-links.active {
-      right: 0;
-    }
-    .burger {
-      display: block;
-      z-index: 1150;
-    }
-    .section-title {
-      font-size: 2.2rem;
-    }
-    .hero-content p {
-      font-size: 1rem;
-    }
-  }
-
-  /* floating particles / ambiance */
-  .glow-spot {
-    position: fixed;
-    width: 35vw;
-    height: 35vw;
-    background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, rgba(0,0,0,0) 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 0;
-    bottom: 0;
-    left: 0;
-    filter: blur(60px);
-  }
-  .glow-spot-two {
-    top: 20%;
-    right: 0;
-    position: fixed;
-    width: 40vw;
-    height: 40vw;
-    background: radial-gradient(circle, rgba(212,175,55,0.05) 0%, rgba(0,0,0,0) 70%);
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 0;
-    filter: blur(70px);
-  }
-</style>
+        @media (max-width: 1100px) {
+            body { padding: 10px; }
+            .stats { padding: 5px 14px; }
+            .stats span { font-size: 1.1rem; }
+        }
+    </style>
 </head>
 <body>
-
-<div class="glow-spot"></div>
-<div class="glow-spot-two"></div>
-
-<header class="header" id="header">
-  <div class="container nav">
-    <div class="logo">VELVET DRIVE</div>
-    <ul class="nav-links" id="navLinks">
-      <li><a href="#home">Главная</a></li>
-      <li><a href="#fleet">Автопарк</a></li>
-      <li><a href="#excellence">Преимущества</a></li>
-      <li><a href="#contact">Контакты</a></li>
-    </ul>
-    <div class="burger" id="burger"><i class="fas fa-gem"></i></div>
-  </div>
-</header>
-
-<!-- HERO SECTION -->
-<section class="hero" id="home">
-  <div class="container hero-content">
-    <h1>Искусство скорости<br>и роскоши</h1>
-    <p>Эксклюзивный парк суперкаров и премиум седанов. Ощутите безупречный сервис и стиль Velvet Drive.</p>
-    <button class="btn-gold" id="exploreBtn">Выбрать авто <i class="fas fa-arrow-right" style="margin-left: 8px;"></i></button>
-  </div>
-</section>
-
-<!-- FLEET SECTION - ELITE CARS -->
-<section id="fleet">
-  <div class="container">
-    <h2 class="section-title">Элитный автопарк</h2>
-    <div class="cars-grid" id="carsGrid">
-      <!-- Ferrari SF90 Stradale -->
-      <div class="card">
-        <img class="card-img" src="https://images.pexels.com/photos/337909/pexels-photo-337909.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Ferrari SF90" loading="lazy">
-        <h3>Ferrari SF90</h3>
-        <div class="car-meta"><span><i class="fas fa-tachometer-alt"></i> 986 л.с.</span><span><i class="fas fa-bolt"></i> V8 Hybrid</span></div>
-        <div class="price">$1 200 <small>/ день</small></div>
-        <button class="btn-outline rent-btn" data-car="Ferrari SF90">Забронировать <i class="fas fa-calendar-check"></i></button>
-      </div>
-      <!-- Lamborghini Revuelto (Dream) -->
-      <div class="card">
-        <img class="card-img" src="https://images.pexels.com/photos/1082565/pexels-photo-1082565.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Lamborghini Aventador" loading="lazy">
-        <h3>Lamborghini Revuelto</h3>
-        <div class="car-meta"><span><i class="fas fa-tachometer-alt"></i> 1015 л.с.</span><span><i class="fas fa-bolt"></i> V12 PHEV</span></div>
-        <div class="price">$1 650 <small>/ день</small></div>
-        <button class="btn-outline rent-btn" data-car="Lamborghini Revuelto">Забронировать</button>
-      </div>
-      <!-- Mercedes-AMG GT Black Series -->
-      <div class="card">
-        <img class="card-img" src="https://images.pexels.com/photos/164634/pexels-photo-164634.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Mercedes AMG GT" loading="lazy">
-        <h3>Mercedes-AMG GT</h3>
-        <div class="car-meta"><span><i class="fas fa-tachometer-alt"></i> 720 л.с.</span><span><i class="fas fa-crown"></i> V8 Biturbo</span></div>
-        <div class="price">$950 <small>/ день</small></div>
-        <button class="btn-outline rent-btn" data-car="Mercedes-AMG GT">Забронировать</button>
-      </div>
-      <!-- Rolls-Royce Ghost -->
-      <div class="card">
-        <img class="card-img" src="https://images.pexels.com/photos/1697224/pexels-photo-1697224.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Rolls Royce Ghost" loading="lazy">
-        <h3>Rolls-Royce Ghost</h3>
-        <div class="car-meta"><span><i class="fas fa-gem"></i> 6.75 л V12</span><span><i class="fas fa-champagne-glasses"></i> Luxury</span></div>
-        <div class="price">$1 800 <small>/ день</small></div>
-        <button class="btn-outline rent-btn" data-car="Rolls-Royce Ghost">Забронировать</button>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- EXCELLENCE / WHY US (premium service) -->
-<section id="excellence">
-  <div class="container">
-    <h2 class="section-title">Абсолютный комфорт</h2>
-    <div class="features-grid">
-      <div class="feature-item">
-        <i class="fas fa-car-side"></i>
-        <h4>Premium Fleet</h4>
-        <p>Только топовые автомобили с полным страховым покрытием</p>
-      </div>
-      <div class="feature-item">
-        <i class="fas fa-concierge-bell"></i>
-        <h4>White Glove Service</h4>
-        <p>Доставка авто в любую точку города, персональный менеджер</p>
-      </div>
-      <div class="feature-item">
-        <i class="fas fa-shield-alt"></i>
-        <h4>Полная защита</h4>
-        <p>КАСКО, безлимитный пробег и круглосуточная поддержка</p>
-      </div>
-      <div class="feature-item">
-        <i class="fas fa-calendar-week"></i>
-        <h4>VIP бронирование</h4>
-        <p>Индивидуальные условия для корпоративных клиентов</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT / FOOTER LUXURY -->
-<footer id="contact">
-  <div class="footer">
-    <div class="container">
-      <div class="footer-grid">
-        <div>
-          <div class="footer-logo">VELVET DRIVE</div>
-          <p style="margin-top: 15px; max-width: 260px;">Эксклюзивная аренда автомобилей класса люкс. Стиль, мощь и безупречный сервис.</p>
+<div class="game-container">
+    <canvas id="gameCanvas" width="1200" height="700" style="width:100%; height:auto; max-width:1200px; aspect-ratio:1200/700"></canvas>
+    <div class="hud">
+        <div class="stats">
+            <span id="killCount">0</span> <span class="label">УНИЧТОЖЕНО</span>
         </div>
-        <div>
-          <h4 style="color: #D4AF37;">Контакты</h4>
-          <p><i class="fas fa-phone-alt"></i> +7 (999) 555-33-11</p>
-          <p><i class="fas fa-envelope"></i> reserve@velvetdrive.ru</p>
-          <p><i class="fas fa-map-marker-alt"></i> Москва, Presnenskaya nab., 12</p>
+        <div class="wave-badge" id="waveDisplay">
+            ВОЛНА 1
         </div>
-        <div class="footer-social">
-          <h4 style="color: #D4AF37;">Мы в соцсетях</h4>
-          <a href="#"><i class="fab fa-instagram"></i></a>
-          <a href="#"><i class="fab fa-telegram"></i></a>
-          <a href="#"><i class="fab fa-youtube"></i></a>
+        <div class="stats">
+            <span id="healthValue">❤️ 100</span>
         </div>
-      </div>
-      <div class="footer-copy">
-        <span>© 2025 Velvet Drive — премиум аренда. Все права защищены.</span>
-      </div>
+        <button class="restart-btn" id="restartGameBtn">⚡ РЕСТАРТ</button>
     </div>
-  </div>
-</footer>
+    <div class="controls-hint">
+        🎮 WASD — движение | 🖱️ МЫШЬ — прицел | 🔫 ЛКМ — стрельба
+    </div>
+</div>
 
 <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    // ----- GSAP with ScrollTrigger (full animations)
-    if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
-      gsap.registerPlugin(ScrollTrigger);
-      
-      // Hero fade & scale
-      gsap.from(".hero-content h1", { opacity: 0, y: 60, duration: 1.2, ease: "power3.out" });
-      gsap.from(".hero-content p", { opacity: 0, y: 30, duration: 1, delay: 0.3 });
-      gsap.from(".btn-gold", { opacity: 0, scale: 0.9, duration: 0.8, delay: 0.6 });
-      
-      // Cards Stagger reveal on scroll
-      gsap.from(".card", {
-        scrollTrigger: {
-          trigger: "#fleet",
-          start: "top 75%",
-          toggleActions: "play none none reverse"
-        },
-        opacity: 0,
-        y: 70,
-        duration: 0.8,
-        stagger: 0.2,
-        ease: "back.out(0.6)"
-      });
-      
-      // Feature items reveal
-      gsap.from(".feature-item", {
-        scrollTrigger: {
-          trigger: "#excellence",
-          start: "top 70%",
-        },
-        opacity: 0,
-        scale: 0.92,
-        duration: 0.7,
-        stagger: 0.15
-      });
-      
-      // Header underline effect on ScrollTrigger?
-      ScrollTrigger.create({
-        trigger: "body",
-        start: "top top",
-        end: "+=100",
-        onUpdate: (self) => {
-          const header = document.getElementById("header");
-          if (self.progress > 0.05) header.classList.add("scrolled");
-          else header.classList.remove("scrolled");
-        }
-      });
-    } else {
-      // fallback no gsap: just manual scroll class
-      window.addEventListener("scroll", () => {
-        const header = document.getElementById("header");
-        if (window.scrollY > 20) header.classList.add("scrolled");
-        else header.classList.remove("scrolled");
-      });
-    }
-    
-    // header manual scroll class if no GSAP scrolltrigger edge
-    window.addEventListener("scroll", () => {
-      const header = document.getElementById("header");
-      if (window.scrollY > 20) header.classList.add("scrolled");
-      else if (window.scrollY <= 20) header.classList.remove("scrolled");
-    });
-    
-    // ----- BURGER MENU LOGIC (closing on link + smooth)
-    const burger = document.getElementById("burger");
-    const navLinksMenu = document.getElementById("navLinks");
-    const navLinksItems = document.querySelectorAll(".nav-links a");
-    
-    if (burger) {
-      burger.addEventListener("click", (e) => {
-        e.stopPropagation();
-        navLinksMenu.classList.toggle("active");
-        // change icon for fun
-        const icon = burger.querySelector("i");
-        if (navLinksMenu.classList.contains("active")) {
-          icon.classList.remove("fa-gem");
-          icon.classList.add("fa-times");
-        } else {
-          icon.classList.remove("fa-times");
-          icon.classList.add("fa-gem");
-        }
-      });
-    }
-    
-    // close menu after clicking link
-    navLinksItems.forEach(link => {
-      link.addEventListener("click", () => {
-        navLinksMenu.classList.remove("active");
-        const icon = burger?.querySelector("i");
-        if (icon) {
-          icon.classList.remove("fa-times");
-          icon.classList.add("fa-gem");
-        }
-      });
-    });
-    
-    // smooth scroll for all anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener("click", function(e) {
-        const href = this.getAttribute("href");
-        if (href === "#" || href === "") return;
-        const target = document.querySelector(href);
-        if (target) {
-          e.preventDefault();
-          target.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-      });
-    });
-    
-    // explore button scroll to fleet
-    const exploreBtn = document.getElementById("exploreBtn");
-    if (exploreBtn) {
-      exploreBtn.addEventListener("click", () => {
-        const fleetSection = document.getElementById("fleet");
-        if (fleetSection) fleetSection.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    }
-    
-    // ----- Interactive rent buttons: luxury alert / demo modal effect
-    const rentBtns = document.querySelectorAll(".rent-btn");
-    rentBtns.forEach(btn => {
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        const carName = btn.getAttribute("data-car") || "этого автомобиля";
-        // Create an elegant toast/alert with custom styling (classy simulation)
-        // Using sweet but neat - we can create temporary floating message
-        const toast = document.createElement("div");
-        toast.innerText = `✨ Заявка на ${carName} принята. Менеджер свяжется с вами в течение 15 минут. ✨`;
-        toast.style.position = "fixed";
-        toast.style.bottom = "30px";
-        toast.style.left = "50%";
-        toast.style.transform = "translateX(-50%)";
-        toast.style.backgroundColor = "#1C1C24";
-        toast.style.borderLeft = "5px solid #D4AF37";
-        toast.style.color = "#fff";
-        toast.style.padding = "14px 28px";
-        toast.style.borderRadius = "60px";
-        toast.style.fontWeight = "500";
-        toast.style.fontSize = "0.9rem";
-        toast.style.zIndex = "9999";
-        toast.style.backdropFilter = "blur(12px)";
-        toast.style.boxShadow = "0 10px 25px rgba(0,0,0,0.5)";
-        toast.style.fontFamily = "'Inter', sans-serif";
-        toast.style.letterSpacing = "0.3px";
-        document.body.appendChild(toast);
-        setTimeout(() => {
-          toast.style.opacity = "0";
-          toast.style.transition = "0.3s";
-          setTimeout(() => toast.remove(), 400);
-        }, 2800);
-      });
-    });
-    
-    // optional: dynamic hover animations for cards additional luxury
-    const cards = document.querySelectorAll(".card");
-    cards.forEach(card => {
-      card.addEventListener("mouseenter", () => {
-        if (typeof gsap !== "undefined") {
-          gsap.to(card, { duration: 0.3, boxShadow: "0 30px 45px -12px rgba(212,175,55,0.25)", ease: "power1.out" });
-        }
-      });
-      card.addEventListener("mouseleave", () => {
-        if (typeof gsap !== "undefined") {
-          gsap.to(card, { duration: 0.3, boxShadow: "0 20px 35px -12px rgba(0,0,0,0.5)" });
-        }
-      });
-    });
-    
-    // Add parallax vibe for hero on mousemove (light effect)
-    document.querySelector(".hero")?.addEventListener("mousemove", (e) => {
-      const x = (e.clientX / window.innerWidth) * 20;
-      const y = (e.clientY / window.innerHeight) * 15;
-      const heroContent = document.querySelector(".hero-content");
-      if (heroContent && window.innerWidth > 900) {
-        heroContent.style.transform = `translate(${x * 0.05}px, ${y * 0.05}px)`;
-      }
-    });
-    document.querySelector(".hero")?.addEventListener("mouseleave", () => {
-      const heroContent = document.querySelector(".hero-content");
-      if (heroContent) heroContent.style.transform = "translate(0,0)";
-    });
-    
-    // short fallback for img if one broken (just minor)
-    const imgs = document.querySelectorAll(".card-img");
-    imgs.forEach(img => {
-      img.addEventListener("error", () => {
-        if (img.src.includes("1697224")) img.src = "https://images.pexels.com/photos/1567009/pexels-photo-1567009.jpeg?auto=compress&cs=tinysrgb&w=800";
-        else if (!img.src.includes("pexels")) img.src = "https://images.pexels.com/photos/120049/pexels-photo-120049.jpeg?auto=compress&cs=tinysrgb&w=800";
-      });
-    });
-    
-    // remove overflow lock
-    document.body.style.overflowX = "hidden";
-  });
-</script>
+    (function(){
+        // --- CANVAS & GLOBALS ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
 
+        // Размеры
+        let W = 1200, H = 700;
+        canvas.width = W;
+        canvas.height = H;
+
+        // Game state
+        let gameRunning = true;
+        let score = 0;          // количество убийств
+        let wave = 1;
+        let enemiesAlive = 0;
+        let enemiesToSpawn = 0;
+        let waveInProgress = true;
+        let waveTransitionTimer = 0; // пауза между волнами
+
+        // --- ИГРОК ---
+        const player = {
+            x: W/2,
+            y: H/2,
+            radius: 18,
+            health: 100,
+            maxHealth: 100,
+            invincibleTimer: 0,   // секунды (в кадрах ~60fps)
+            speed: 4.8
+        };
+
+        // --- ДИНАМИЧЕСКИЕ МАССИВЫ ---
+        let enemies = [];
+        let bullets = [];
+        let particles = [];
+
+        // ОРУЖИЕ
+        let shootCooldown = 0;
+        const SHOOT_DELAY_FRAMES = 12;  // ~ 200ms при 60fps
+        let mouseX = player.x, mouseY = player.y;
+
+        // Параметры врагов (базовые)
+        let enemyBaseSpeed = 1.1;
+        let enemyBaseHealth = 1;
+        let enemyBaseRadius = 16;
+
+        // Helper functions
+        function clamp(value, min, max) { return Math.min(max, Math.max(min, value)); }
+
+        // --- ВРАГИ: структура ---
+        class Enemy {
+            constructor(x, y, speed, hp, radius) {
+                this.x = x;
+                this.y = y;
+                this.speed = speed;
+                this.hp = hp;
+                this.maxHp = hp;
+                this.radius = radius;
+                this.color = `hsl(${Math.floor(Math.random() * 20 + 340)}, 70%, 55%)`; // красные оттенки
+            }
+            update(playerX, playerY) {
+                const dx = playerX - this.x;
+                const dy = playerY - this.y;
+                const len = Math.hypot(dx, dy);
+                if(len > 0.01) {
+                    const move = this.speed;
+                    this.x += (dx / len) * move;
+                    this.y += (dy / len) * move;
+                }
+            }
+            draw(ctx) {
+                ctx.save();
+                ctx.shadowBlur = 12;
+                ctx.shadowColor = "#ff3a3a";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI*2);
+                ctx.fillStyle = this.color;
+                ctx.fill();
+                ctx.strokeStyle = "#9a2f2f";
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+                // глаза злые
+                ctx.beginPath();
+                ctx.fillStyle = "white";
+                ctx.arc(this.x-5, this.y-3, 4, 0, Math.PI*2);
+                ctx.arc(this.x+5, this.y-3, 4, 0, Math.PI*2);
+                ctx.fill();
+                ctx.fillStyle = "#0a0a0a";
+                ctx.arc(this.x-5, this.y-4, 2, 0, Math.PI*2);
+                ctx.arc(this.x+5, this.y-4, 2, 0, Math.PI*2);
+                ctx.fill();
+                ctx.restore();
+                // полоска хп если более 1
+                if(this.hp > 1) {
+                    const hpPercent = this.hp / this.maxHp;
+                    ctx.fillStyle = "#c0392b";
+                    ctx.fillRect(this.x-12, this.y-this.radius-5, 24, 4);
+                    ctx.fillStyle = "#2ecc71";
+                    ctx.fillRect(this.x-12, this.y-this.radius-5, 24 * hpPercent, 4);
+                }
+            }
+        }
+
+        // --- ПУЛЯ ---
+        class Bullet {
+            constructor(x, y, angle, speed=9) {
+                this.x = x;
+                this.y = y;
+                this.vx = Math.cos(angle) * speed;
+                this.vy = Math.sin(angle) * speed;
+                this.radius = 4;
+                this.life = true;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if(this.x < -30 || this.x > W+30 || this.y < -30 || this.y > H+30) this.life = false;
+            }
+            draw(ctx) {
+                ctx.save();
+                ctx.shadowBlur = 8;
+                ctx.shadowColor = "#f5cb5c";
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 4, 0, Math.PI*2);
+                ctx.fillStyle = "#ffdd77";
+                ctx.fill();
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI*2);
+                ctx.fillStyle = "white";
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // --- ЧАСТИЦЫ (кровь/искры) ---
+        function addParticles(x, y, color, count=6) {
+            for(let i=0;i<count;i++) {
+                particles.push({
+                    x: x, y: y, vx: (Math.random() - 0.5)*4, vy: (Math.random() - 0.5)*4,
+                    life: 0.8, color: color || "#ff6a4d", size: Math.random()*3+2
+                });
+            }
+        }
+
+        // --- СПАВН ВРАГОВ (по волнам) ---
+        function startWave(waveNumber) {
+            const baseCount = Math.min(3 + Math.floor(waveNumber * 0.8), 14) + (waveNumber >= 4 ? 2 : 0);
+            let enemyCount = baseCount;
+            if(waveNumber > 6) enemyCount = 9 + Math.floor(waveNumber/2);
+            if(enemyCount > 22) enemyCount = 22;
+            enemiesToSpawn = enemyCount;
+            enemiesAlive = enemyCount;
+            // увеличиваем сложность: скорость, здоровье
+            let bonusSpeed = Math.min(0.6, (waveNumber-1) * 0.08);
+            let extraHp = (waveNumber >= 3) ? Math.floor(waveNumber/3) : 0;
+            for(let i=0; i<enemyCount; i++) {
+                let side = Math.floor(Math.random() * 4);
+                let spawnX, spawnY;
+                const padding = 45;
+                if(side === 0) { spawnX = Math.random() * W; spawnY = -padding; }
+                else if(side === 2) { spawnX = Math.random() * W; spawnY = H + padding; }
+                else if(side === 1) { spawnX = W + padding; spawnY = Math.random() * H; }
+                else { spawnX = -padding; spawnY = Math.random() * H; }
+                let speedVal = enemyBaseSpeed + bonusSpeed + (Math.random() * 0.4);
+                let hpVal = 1 + extraHp;
+                if(waveNumber >= 5 && Math.random() < 0.25) hpVal += 1;
+                let rad = enemyBaseRadius + (hpVal > 1 ? 2 : 0);
+                enemies.push(new Enemy(spawnX, spawnY, speedVal, hpVal, rad));
+            }
+            waveInProgress = true;
+        }
+
+        // завершение волны
+        function finishWave() {
+            wave++;
+            waveInProgress = false;
+            waveTransitionTimer = 70; // ~1.2 секунды пауза
+            document.getElementById('waveDisplay').innerText = `ВОЛНА ${wave}`;
+            // дополнительное лечение после волны (малое)
+            player.health = Math.min(player.maxHealth, player.health + 15);
+            updateHealthDisplay();
+        }
+
+        // --- ОБНОВЛЕНИЕ ИГРЫ ---
+        function updateGame() {
+            if(!gameRunning) return;
+
+            // таймер неуязвимости
+            if(player.invincibleTimer > 0) player.invincibleTimer--;
+
+            // Пауза между волнами
+            if(waveTransitionTimer > 0) {
+                waveTransitionTimer--;
+                if(waveTransitionTimer === 0) {
+                    startWave(wave);
+                }
+                return; // в паузе нет движения врагов/стрельбы
+            }
+
+            // Если волна активна, но врагов нет и нет активных врагов, завершаем волну
+            if(waveInProgress && enemies.length === 0 && enemiesToSpawn === 0) {
+                finishWave();
+                return;
+            }
+
+            // 1. Движение игрока (WASD)
+            let moveX = 0, moveY = 0;
+            if(keys['w'] || keys['ArrowUp']) moveY -= 1;
+            if(keys['s'] || keys['ArrowDown']) moveY += 1;
+            if(keys['a'] || keys['ArrowLeft']) moveX -= 1;
+            if(keys['d'] || keys['ArrowRight']) moveX += 1;
+            if(moveX !== 0 || moveY !== 0) {
+                const len = Math.hypot(moveX, moveY);
+                moveX /= len;
+                moveY /= len;
+            }
+            let newX = player.x + moveX * player.speed;
+            let newY = player.y + moveY * player.speed;
+            player.x = clamp(newX, player.radius + 5, W - player.radius - 5);
+            player.y = clamp(newY, player.radius + 5, H - player.radius - 5);
+
+            // 2. Стрельба (кулдаун)
+            if(shootCooldown > 0) shootCooldown--;
+            if(mousePressed && gameRunning && shootCooldown === 0 && waveTransitionTimer === 0) {
+                const angle = Math.atan2(mouseY - player.y, mouseX - player.x);
+                bullets.push(new Bullet(player.x, player.y, angle, 11));
+                shootCooldown = SHOOT_DELAY_FRAMES;
+                // звуковой эффект (без звука, но вибрация пуль)
+            }
+
+            // 3. Обновление пуль
+            for(let i=0; i<bullets.length; i++) {
+                bullets[i].update();
+                if(!bullets[i].life) {
+                    bullets.splice(i,1);
+                    i--;
+                }
+            }
+
+            // 4. Обновление врагов + коллизия с игроком
+            for(let i=0; i<enemies.length; i++) {
+                const e = enemies[i];
+                e.update(player.x, player.y);
+                // столкновение с игроком
+                const distToPlayer = Math.hypot(e.x - player.x, e.y - player.y);
+                if(distToPlayer < e.radius + player.radius && player.invincibleTimer === 0 && gameRunning) {
+                    const dmg = 14 + Math.floor(wave/3);
+                    player.health -= dmg;
+                    player.invincibleTimer = 25;  // ~0.4 сек
+                    updateHealthDisplay();
+                    addParticles(player.x, player.y, "#ffaa55", 12);
+                    // отталкивание врага
+                    const angle = Math.atan2(e.y - player.y, e.x - player.x);
+                    e.x += Math.cos(angle) * 28;
+                    e.y += Math.sin(angle) * 28;
+                    if(player.health <= 0) {
+                        gameRunning = false;
+                        player.health = 0;
+                        updateHealthDisplay();
+                        return;
+                    }
+                }
+            }
+
+            // 5. Коллизия пуль с врагами
+            for(let i=0; i<bullets.length; i++) {
+                const bullet = bullets[i];
+                let hit = false;
+                for(let j=0; j<enemies.length; j++) {
+                    const enemy = enemies[j];
+                    const dist = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
+                    if(dist < bullet.radius + enemy.radius) {
+                        hit = true;
+                        enemy.hp -= 1;
+                        addParticles(bullet.x, bullet.y, "#ff8844", 5);
+                        if(enemy.hp <= 0) {
+                            // убийство
+                            enemies.splice(j,1);
+                            score++;
+                            enemiesAlive--;
+                            document.getElementById('killCount').innerText = score;
+                            addParticles(enemy.x, enemy.y, "#ff4444", 12);
+                        }
+                        break;
+                    }
+                }
+                if(hit) {
+                    bullets.splice(i,1);
+                    i--;
+                }
+            }
+
+            // Обновление частиц
+            for(let i=0; i<particles.length; i++) {
+                particles[i].x += particles[i].vx;
+                particles[i].y += particles[i].vy;
+                particles[i].life -= 0.025;
+                if(particles[i].life <= 0) {
+                    particles.splice(i,1);
+                    i--;
+                }
+            }
+
+            // Дополнительно: если игра окончена, не продолжаем
+        }
+
+        // --- ОТРИСОВКА ВСЕГО ---
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            // Тёмный градиентный фон
+            const grad = ctx.createLinearGradient(0, 0, W, H);
+            grad.addColorStop(0, "#03050f");
+            grad.addColorStop(1, "#0c1120");
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, W, H);
+            // сетка (tech)
+            ctx.strokeStyle = "#2a2f3f";
+            ctx.lineWidth = 0.5;
+            for(let i=0; i<W; i+=50){
+                ctx.beginPath();
+                ctx.moveTo(i,0);
+                ctx.lineTo(i,H);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0,i%H);
+                ctx.lineTo(W,i%H);
+                ctx.stroke();
+            }
+            
+            // Враги
+            for(let e of enemies) e.draw(ctx);
+            // Пули
+            for(let b of bullets) b.draw(ctx);
+            // Частицы
+            for(let p of particles) {
+                ctx.globalAlpha = p.life * 0.9;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI*2);
+                ctx.fillStyle = p.color;
+                ctx.fill();
+                ctx.globalAlpha = 1;
+            }
+            
+            // Игрок (элитный шутер-стиль)
+            ctx.save();
+            ctx.shadowBlur = 16;
+            ctx.shadowColor = "#2ad4ff";
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius, 0, Math.PI*2);
+            ctx.fillStyle = "#3a86ff";
+            ctx.fill();
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, player.radius-4, 0, Math.PI*2);
+            ctx.fillStyle = "#80b3ff";
+            ctx.fill();
+            // прицел-точка игрока
+            ctx.beginPath();
+            ctx.arc(player.x, player.y, 5, 0, Math.PI*2);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            // шлем/броня
+            ctx.beginPath();
+            ctx.moveTo(player.x-8, player.y-6);
+            ctx.lineTo(player.x, player.y-14);
+            ctx.lineTo(player.x+8, player.y-6);
+            ctx.fillStyle = "#ffcc44";
+            ctx.fill();
+            ctx.restore();
+
+            // индикатор направления мыши (прицел)
+            ctx.beginPath();
+            ctx.moveTo(mouseX-10, mouseY);
+            ctx.lineTo(mouseX+10, mouseY);
+            ctx.moveTo(mouseX, mouseY-10);
+            ctx.lineTo(mouseX, mouseY+10);
+            ctx.strokeStyle = "#f0c45a";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(mouseX, mouseY, 8, 0, Math.PI*2);
+            ctx.strokeStyle = "#ffaa33";
+            ctx.setLineDash([4,6]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Полоска здоровья над игроком
+            const healthPercent = player.health / player.maxHealth;
+            ctx.fillStyle = "#2c2c2c";
+            ctx.fillRect(player.x-25, player.y-player.radius-12, 50, 7);
+            ctx.fillStyle = "#e63946";
+            ctx.fillRect(player.x-25, player.y-player.radius-12, 50 * healthPercent, 7);
+            ctx.fillStyle = "#f1c40f";
+            ctx.fillRect(player.x-25, player.y-player.radius-12, 50 * healthPercent, 3);
+            
+            // Текст волны, если пауза
+            if(waveTransitionTimer > 0 && !waveInProgress) {
+                ctx.font = "bold 28monospace";
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = "#ffe6a3";
+                ctx.shadowColor = "black";
+                ctx.fillText(`⚔️ ВОЛНА ${wave} ⚔️`, W/2-120, H/2-40);
+                ctx.font = "16px monospace";
+                ctx.fillStyle = "#c9b16b";
+                ctx.fillText("ПРИГОТОВИТЬСЯ...", W/2-85, H/2+20);
+            }
+            
+            // Game Over экран
+            if(!gameRunning) {
+                ctx.fillStyle = "rgba(0,0,0,0.85)";
+                ctx.fillRect(0,0,W,H);
+                ctx.font = "bold 48px 'Orbitron', monospace";
+                ctx.fillStyle = "#e43f3f";
+                ctx.shadowBlur = 0;
+                ctx.fillText("GAME OVER", W/2-150, H/2-50);
+                ctx.font = "24px monospace";
+                ctx.fillStyle = "#f0b27a";
+                ctx.fillText(`Уничтожено: ${score}  |  Волна: ${wave-1}`, W/2-200, H/2+30);
+                ctx.font = "18px monospace";
+                ctx.fillStyle = "#ddb582";
+                ctx.fillText("Нажмите [РЕСТАРТ] для новой битвы", W/2-180, H/2+100);
+            }
+        }
+
+        // --- ОБНОВЛЕНИЕ ЗДОРОВЬЯ В HUD ---
+        function updateHealthDisplay() {
+            const heartSpan = document.getElementById('healthValue');
+            if(heartSpan) heartSpan.innerHTML = `❤️ ${Math.floor(player.health)}`;
+        }
+
+        // --- ПЕРЕЗАПУСК ИГРЫ (полный сброс) ---
+        function restartGame() {
+            gameRunning = true;
+            score = 0;
+            wave = 1;
+            enemies = [];
+            bullets = [];
+            particles = [];
+            player.health = player.maxHealth;
+            player.x = W/2;
+            player.y = H/2;
+            player.invincibleTimer = 0;
+            document.getElementById('killCount').innerText = "0";
+            document.getElementById('waveDisplay').innerText = "ВОЛНА 1";
+            updateHealthDisplay();
+            waveInProgress = false;
+            waveTransitionTimer = 10; // быстрый старт
+            enemiesAlive = 0;
+            enemiesToSpawn = 0;
+            shootCooldown = 0;
+            // запускаем первую волну
+            setTimeout(() => {
+                if(waveTransitionTimer <= 0 && !waveInProgress) startWave(1);
+            }, 50);
+            if(waveTransitionTimer === 0) startWave(1);
+        }
+
+        // --- УПРАВЛЕНИЕ (клавиши + мышь)---
+        const keys = {
+            w: false, a: false, s: false, d: false,
+            ArrowUp: false, ArrowLeft: false, ArrowDown: false, ArrowRight: false
+        };
+        let mousePressed = false;
+
+        function handleKeyDown(e) {
+            const key = e.key;
+            if(keys.hasOwnProperty(key)) keys[key] = true;
+            // предотвращаем скролл
+            if(['w','a','s','d','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(key))
+                e.preventDefault();
+        }
+        function handleKeyUp(e) {
+            const key = e.key;
+            if(keys.hasOwnProperty(key)) keys[key] = false;
+        }
+        function handleMouseMove(e) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            let canvasX = (e.clientX - rect.left) * scaleX;
+            let canvasY = (e.clientY - rect.top) * scaleY;
+            canvasX = clamp(canvasX, 0, W);
+            canvasY = clamp(canvasY, 0, H);
+            mouseX = canvasX;
+            mouseY = canvasY;
+        }
+        function handleMouseDown(e) {
+            if(e.button === 0) {
+                mousePressed = true;
+                e.preventDefault();
+            }
+        }
+        function handleMouseUp(e) {
+            if(e.button === 0) mousePressed = false;
+        }
+        function preventContext(e) { e.preventDefault(); }
+        
+        // --- АНИМАЦИОННЫЙ ЦИКЛ ---
+        let lastTimestamp = 0;
+        function gameLoop() {
+            if(gameRunning) updateGame();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Инициализация событий
+        window.addEventListener('load', () => {
+            restartGame();   // первый старт
+            updateHealthDisplay();
+            // события
+            window.addEventListener('keydown', handleKeyDown);
+            window.addEventListener('keyup', handleKeyUp);
+            canvas.addEventListener('mousemove', handleMouseMove);
+            canvas.addEventListener('mousedown', handleMouseDown);
+            window.addEventListener('mouseup', handleMouseUp);
+            canvas.addEventListener('contextmenu', preventContext);
+            document.getElementById('restartGameBtn').addEventListener('click', () => {
+                restartGame();
+            });
+            gameLoop();
+        });
+        
+        // ресайз коррекция координат мыши при изменении размера canvas (css-масштаб)
+        window.addEventListener('resize', () => {});
+    })();
+</script>
 </body>
 </html>
