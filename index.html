@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Luxury Estates | Элитная недвижимость</title>
-    <!-- Google Fonts & Font Awesome -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- GSAP & ScrollTrigger -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>LUXURA | Элитная недвижимость премиум-класса</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <style>
@@ -19,51 +17,39 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0A0C10;
-            color: #FFFFFF;
+            background: #030303;
+            color: #F5F5F0;
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
 
-        /* Custom scroll */
+        /* кастомный скролл */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #1A1D24;
+            background: #0b0b0e;
         }
         ::-webkit-scrollbar-thumb {
-            background: #C6A43F;
-            border-radius: 10px;
+            background: #C5A059;
+            border-radius: 4px;
         }
 
-        /* Анимационные классы */
-        .fade-up {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-        .fade-up.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        .scale-in {
-            opacity: 0;
-            transform: scale(0.92);
-            transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.2), transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.2);
-        }
-        .scale-in.visible {
-            opacity: 1;
-            transform: scale(1);
+        /* премиум-стеклоэффекты */
+        .glass-panel {
+            background: rgba(10, 12, 18, 0.45);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 160, 89, 0.2);
+            border-radius: 32px;
         }
 
         .container {
-            max-width: 1280px;
+            max-width: 1400px;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 32px;
         }
 
-        /* Header */
+        /* header */
         .header {
             position: fixed;
             top: 0;
@@ -75,63 +61,78 @@
             background: transparent;
         }
         .header.scrolled {
-            background: rgba(10, 12, 16, 0.96);
-            backdrop-filter: blur(12px);
+            background: rgba(3, 3, 3, 0.90);
+            backdrop-filter: blur(18px);
             padding: 16px 32px;
-            border-bottom: 1px solid rgba(198, 164, 63, 0.2);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+            border-bottom: 1px solid rgba(197, 160, 89, 0.35);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
+
         .nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
+
         .logo {
             font-family: 'Playfair Display', serif;
-            font-size: 28px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #FFFFFF 0%, #C6A43F 100%);
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(130deg, #FFFFFF 20%, #E4C16E 80%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -0.3px;
         }
+
         .nav-links {
             display: flex;
-            gap: 42px;
+            gap: 48px;
             list-style: none;
         }
+
         .nav-links a {
             text-decoration: none;
-            color: #FFFFFF;
+            color: #F5F5F0;
             font-weight: 500;
-            font-size: 16px;
-            transition: color 0.3s;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            transition: 0.3s;
             position: relative;
         }
+
         .nav-links a::after {
             content: '';
             position: absolute;
-            bottom: -6px;
+            bottom: -8px;
             left: 0;
-            width: 0%;
+            width: 0;
             height: 2px;
-            background: #C6A43F;
-            transition: width 0.3s ease-out;
+            background: #C5A059;
+            transition: width 0.3s ease;
         }
+
         .nav-links a:hover {
-            color: #C6A43F;
+            color: #C5A059;
         }
+
         .nav-links a:hover::after {
             width: 100%;
         }
+
         .burger {
             display: none;
             font-size: 28px;
             cursor: pointer;
-            color: white;
+            color: #F5F5F0;
+            transition: 0.2s;
         }
 
-        /* Hero с надежным фоном */
+        .burger:hover {
+            color: #C5A059;
+        }
+
+        /* HERO кинематографический */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -139,290 +140,291 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=1600');
-            background-size: cover;
-            background-position: center;
+            background: url('https://images.pexels.com/photos/20348583/pexels-photo-20348583/free-photo-of-luxury-villa-with-pool-and-garden-at-sunset.jpeg?auto=compress&cs=tinysrgb&w=1600') center/cover no-repeat;
+            background-attachment: fixed;
             z-index: 1;
-        }
-        .hero-content {
-            max-width: 900px;
-            padding: 0 20px;
-        }
-        .hero-subtitle {
-            font-size: 18px;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-weight: 500;
-            color: #C6A43F;
-            margin-bottom: 24px;
-        }
-        .hero-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 70px;
-            line-height: 1.1;
-            font-weight: 700;
-            margin-bottom: 24px;
-        }
-        .hero-desc {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 40px;
-            opacity: 0.9;
-        }
-        .btn-gold {
-            background: linear-gradient(105deg, #C6A43F 0%, #E4C06E 100%);
-            border: none;
-            padding: 16px 42px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #0A0C10;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.4s;
-            box-shadow: 0 8px 20px rgba(198,164,63,0.3);
-        }
-        .btn-gold:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(198,164,63,0.5);
-        }
-        section {
-            padding: 100px 0;
             overflow: hidden;
         }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(0,0,0,0.45) 0%, #030303 90%);
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 1100px;
+            padding: 0 24px;
+            z-index: 2;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: #C5A059;
+            margin-bottom: 24px;
+            background: rgba(0,0,0,0.4);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 40px;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 28px;
+            text-shadow: 0 8px 28px rgba(0,0,0,0.5);
+        }
+
+        .hero-desc {
+            font-size: 1.2rem;
+            max-width: 680px;
+            margin: 0 auto 40px auto;
+            opacity: 0.85;
+        }
+
+        .btn-luxury {
+            background: linear-gradient(95deg, #C5A059 0%, #E8CD8F 100%);
+            border: none;
+            padding: 18px 48px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #030303;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 12px 28px rgba(197,160,89,0.3);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-luxury:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 22px 40px rgba(197,160,89,0.45);
+            background: linear-gradient(95deg, #D7B167 0%, #F5E2B0 100%);
+        }
+
         .section-title {
             font-family: 'Playfair Display', serif;
-            font-size: 48px;
+            font-size: 3rem;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
             font-weight: 700;
         }
+
         .section-sub {
             text-align: center;
-            color: #C6A43F;
+            color: #C5A059;
             text-transform: uppercase;
-            letter-spacing: 3px;
-            font-size: 14px;
-            margin-bottom: 60px;
+            letter-spacing: 5px;
+            font-size: 0.8rem;
+            margin-bottom: 56px;
         }
-        /* Карточки */
+
+        /* Карточки объектов — 3D hover + анимация */
         .properties-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 40px;
-            margin-top: 20px;
+            gap: 48px;
         }
+
         .property-card {
-            background: #12151C;
-            border-radius: 28px;
+            background: #0F1117;
+            border-radius: 36px;
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
-            border: 1px solid rgba(198,164,63,0.15);
+            transition: transform 0.5s cubic-bezier(0.2,0.9,0.4,1.1), box-shadow 0.5s;
+            border: 1px solid rgba(197,160,89,0.2);
+            box-shadow: 0 30px 40px -20px rgba(0,0,0,0.5);
         }
+
         .property-card:hover {
-            transform: translateY(-12px);
-            border-color: rgba(198,164,63,0.5);
-            box-shadow: 0 28px 45px rgba(0,0,0,0.3);
+            transform: translateY(-15px) scale(1.01);
+            border-color: rgba(197,160,89,0.6);
+            box-shadow: 0 35px 55px -15px rgba(0,0,0,0.8);
         }
+
         .card-img {
-            height: 280px;
+            height: 300px;
             overflow: hidden;
         }
+
         .card-img img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.7s ease;
+            transition: transform 0.9s cubic-bezier(0.23, 1, 0.32, 1);
         }
+
         .property-card:hover .card-img img {
-            transform: scale(1.05);
+            transform: scale(1.07);
         }
+
         .card-content {
-            padding: 28px;
+            padding: 32px;
         }
+
         .price {
-            font-size: 28px;
-            font-weight: 700;
-            color: #C6A43F;
-            margin-bottom: 12px;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #C5A059;
+            letter-spacing: -0.5px;
         }
+
         .card-title {
-            font-size: 22px;
+            font-size: 1.7rem;
             font-weight: 600;
-            margin-bottom: 12px;
+            margin: 8px 0 10px;
         }
-        .card-location {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #B0B5C2;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
+
         .features {
             display: flex;
-            gap: 20px;
+            gap: 28px;
             border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 18px;
-            margin-top: 8px;
-        }
-        .features span {
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #D1D5DB;
-        }
-        /* Преимущества */
-        .amenities-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 40px;
-            margin-top: 40px;
-        }
-        .amenity-item {
-            text-align: center;
-            padding: 35px 20px;
-            background: rgba(18, 21, 28, 0.7);
-            backdrop-filter: blur(4px);
-            border-radius: 40px;
-            transition: transform 0.3s, background 0.4s;
-            border: 1px solid rgba(198,164,63,0.2);
-        }
-        .amenity-item:hover {
-            transform: translateY(-8px);
-            background: rgba(198,164,63,0.08);
-            border-color: #C6A43F;
-        }
-        .amenity-icon {
-            font-size: 48px;
-            color: #C6A43F;
-            margin-bottom: 24px;
-        }
-        /* Статистика */
-        .stats-container {
-            background: linear-gradient(135deg, #12151C 0%, #0A0C10 100%);
-            border-radius: 60px;
-            padding: 60px 40px;
-            margin-top: 40px;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            text-align: center;
-            gap: 30px;
-            border: 1px solid rgba(198,164,63,0.25);
-        }
-        .stat-item {
-            flex: 1;
-            min-width: 150px;
-        }
-        .stat-number {
-            font-size: 56px;
-            font-weight: 700;
-            font-family: 'Playfair Display', serif;
-            color: #C6A43F;
-            margin-bottom: 10px;
-        }
-        /* Отзывы */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .testimonial {
-            background: #12151C;
-            padding: 32px;
-            border-radius: 32px;
-            transition: 0.3s;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .testimonial:hover {
-            border-color: #C6A43F;
-        }
-        .client-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            padding-top: 20px;
             margin-top: 20px;
         }
-        .client-img {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 2px solid #C6A43F;
+
+        /* Преимущества с иконами в стиле glassmorph */
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 40px;
         }
-        /* Footer */
-        footer {
-            background: #07090D;
-            padding: 60px 0 30px;
-            border-top: 1px solid rgba(198,164,63,0.2);
+
+        .amenity-card {
+            background: rgba(15, 17, 23, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 40px 28px;
+            text-align: center;
+            transition: 0.3s;
+            border: 1px solid rgba(197,160,89,0.2);
         }
-        .footer-content {
+
+        .amenity-card:hover {
+            background: rgba(25, 28, 38, 0.8);
+            border-color: #C5A059;
+            transform: translateY(-10px);
+        }
+
+        .amenity-icon {
+            font-size: 58px;
+            color: #C5A059;
+            margin-bottom: 28px;
+        }
+
+        /* Нестандартные эффекты для статистики — анимация цифр */
+        .stats-cinematic {
+            background: radial-gradient(circle at 20% 30%, #14161f, #030303);
+            border-radius: 80px;
+            padding: 70px 40px;
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
             gap: 40px;
-            margin-bottom: 50px;
+            border: 1px solid goldenrod;
+            box-shadow: 0 30px 50px rgba(0,0,0,0.6);
         }
-        .footer-col h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-family: 'Playfair Display', serif;
-        }
-        .footer-col p, .footer-col a {
-            color: #B0B5C2;
-            line-height: 1.8;
-            text-decoration: none;
-        }
-        .social-links a {
-            font-size: 22px;
-            margin-right: 20px;
-            color: #B0B5C2;
-            transition: color 0.3s;
-        }
-        .social-links a:hover {
-            color: #C6A43F;
-        }
-        .copyright {
+
+        .stat-block {
             text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.05);
-            color: #7A7F8A;
-            font-size: 14px;
+            flex: 1;
         }
-        @media (max-width: 992px) {
-            .hero-title { font-size: 52px; }
-            .section-title { font-size: 40px; }
+
+        .stat-number {
+            font-size: 64px;
+            font-weight: 800;
+            font-family: 'Playfair Display', serif;
+            color: #E5C27E;
+            line-height: 1.2;
         }
-        @media (max-width: 768px) {
+
+        /* Отзывы с акцентом золото */
+        .testimonial-grid {
+            display: grid;
+            gap: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
+        }
+
+        .testimonial-card {
+            background: rgba(18, 20, 27, 0.75);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 38px;
+            border: 1px solid rgba(197,160,89,0.25);
+            transition: 0.2s;
+        }
+
+        /* Footer premium */
+        .footer {
+            background: #010101;
+            border-top: 1px solid rgba(197,160,89,0.4);
+            padding: 70px 0 30px;
+        }
+
+        .social-icon i {
+            font-size: 28px;
+            margin-right: 24px;
+            color: #ddd;
+            transition: 0.2s;
+        }
+
+        .social-icon i:hover {
+            color: #C5A059;
+            transform: translateY(-3px);
+        }
+
+        /* responsive */
+        @media (max-width: 968px) {
             .nav-links {
                 position: fixed;
                 top: 0;
                 right: -100%;
                 width: 70%;
-                height: 100vh;
-                background: rgba(10,12,16,0.98);
-                backdrop-filter: blur(24px);
+                height: 100dvh;
+                background: rgba(0,0,0,0.96);
+                backdrop-filter: blur(40px);
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                gap: 40px;
-                transition: 0.4s ease-out;
-                z-index: 999;
+                transition: 0.4s;
+                z-index: 1000;
             }
             .nav-links.active {
                 right: 0;
             }
             .burger {
                 display: block;
-                z-index: 1001;
             }
-            .hero-title { font-size: 42px; }
-            .stats-container { flex-direction: column; }
+            .container {
+                padding: 0 20px;
+            }
+            .stats-cinematic {
+                flex-direction: column;
+                text-align: center;
+            }
         }
-        @media (max-width: 480px) {
-            .hero-title { font-size: 36px; }
-            .btn-gold { padding: 12px 30px; }
+
+        /* hidden animation classes */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(45px);
+            transition: opacity 0.8s cubic-bezier(0.2,0.9,0.4,1.1), transform 0.8s ease;
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .glimmer {
+            position: relative;
+            overflow: hidden;
         }
     </style>
 </head>
@@ -430,210 +432,224 @@
 
 <header class="header" id="header">
     <div class="nav container">
-        <div class="logo">LUXURA<span style="color:#C6A43F;">.</span></div>
+        <div class="logo">LUXURA<span style="color:#C5A059;">.</span></div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#home">Главная</a></li>
-            <li><a href="#properties">Объекты</a></li>
-            <li><a href="#amenities">Преимущества</a></li>
-            <li><a href="#testimonials">Отзывы</a></li>
-            <li><a href="#contact">Контакты</a></li>
+            <li><a href="#home">ДОМ</a></li>
+            <li><a href="#properties">РЕЗИДЕНЦИИ</a></li>
+            <li><a href="#amenities">ПРИВИЛЕГИИ</a></li>
+            <li><a href="#testimonials">ОТЗЫВЫ</a></li>
+            <li><a href="#contact">КОНТАКТЫ</a></li>
         </ul>
         <div class="burger" id="burger">
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-gem"></i>
         </div>
     </div>
 </header>
 
 <main>
+    <!-- Hero Section - кинематографичный -->
     <section id="home" class="hero">
         <div class="hero-content">
-            <div class="hero-subtitle">EXCLUSIVE LIVING</div>
-            <h1 class="hero-title">Там, где роскошь<br> встречает вдохновение</h1>
-            <p class="hero-desc">Элитные резиденции, пентхаусы и виллы премиум-класса в лучших локациях мира. Персональный подход 24/7.</p>
-            <button class="btn-gold" id="heroBtn">Исследовать <i class="fas fa-arrow-right"></i></button>
+            <div class="hero-subtitle" id="heroSub">ИСКЛЮЧИТЕЛЬНЫЙ ОБРАЗ ЖИЗНИ</div>
+            <h1 class="hero-title" id="heroTitle">Где архитектура <br>становится искусством</h1>
+            <p class="hero-desc" id="heroDesc">Виллы, пентхаусы и резиденции класса де-люкс, которые переопределяют величие. Инвестиции от $1,2M до $24M</p>
+            <button class="btn-luxury" id="exploreBtn">ПОГРУЗИТЬСЯ <i class="fas fa-arrow-right"></i></button>
         </div>
     </section>
 
+    <!-- Объекты с гарантией элитности -->
     <section id="properties">
         <div class="container">
-            <div class="section-sub">Эксклюзивная коллекция</div>
-            <h2 class="section-title fade-up">Престижные резиденции</h2>
+            <div class="section-sub">КОЛЛЕКЦИЯ COUTURE</div>
+            <h2 class="section-title fade-up">Резиденции <br>с признанным статусом</h2>
             <div class="properties-grid">
-                <div class="property-card scale-in">
-                    <div class="card-img">
-                        <img src="https://images.pexels.com/photos/258154/pexels-photo-258154.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Вилла с бассейном">
-                    </div>
+                <div class="property-card">
+                    <div class="card-img"><img src="https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800" alt="villa oro"></div>
                     <div class="card-content">
                         <div class="price">$2 850 000</div>
-                        <div class="card-title">Villa Panorama</div>
-                        <div class="card-location"><i class="fas fa-map-marker-alt"></i> Beverly Hills, CA</div>
-                        <div class="features">
-                            <span><i class="fas fa-bed"></i> 5 beds</span>
-                            <span><i class="fas fa-bath"></i> 6 baths</span>
-                            <span><i class="fas fa-vector-square"></i> 580 m²</span>
-                        </div>
+                        <div class="card-title">Villa d’Oro</div>
+                        <div class="card-location"><i class="fas fa-map-pin"></i> Beverly Hills, CA</div>
+                        <div class="features"><span><i class="fas fa-bed"></i> 5 спален</span><span><i class="fas fa-bath"></i> 6 ванн</span><span><i class="fas fa-arrows-alt"></i> 610 м²</span></div>
                     </div>
                 </div>
-                <div class="property-card scale-in">
-                    <div class="card-img">
-                        <img src="https://images.pexels.com/photos/2587054/pexels-photo-2587054.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Пентхаус">
-                    </div>
+                <div class="property-card">
+                    <div class="card-img"><img src="https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?auto=compress&cs=tinysrgb&w=800" alt="sky penthouse"></div>
                     <div class="card-content">
                         <div class="price">$4 200 000</div>
                         <div class="card-title">Sky Penthouse</div>
-                        <div class="card-location"><i class="fas fa-map-marker-alt"></i> Manhattan, NY</div>
-                        <div class="features">
-                            <span><i class="fas fa-bed"></i> 4 beds</span>
-                            <span><i class="fas fa-bath"></i> 5 baths</span>
-                            <span><i class="fas fa-vector-square"></i> 340 m²</span>
-                        </div>
+                        <div class="card-location"><i class="fas fa-map-pin"></i> Manhattan, NY</div>
+                        <div class="features"><span><i class="fas fa-bed"></i> 4 спальни</span><span><i class="fas fa-bath"></i> 5 ванн</span><span><i class="fas fa-arrows-alt"></i> 389 м²</span></div>
                     </div>
                 </div>
-                <div class="property-card scale-in">
-                    <div class="card-img">
-                        <img src="https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Роскошный особняк">
-                    </div>
+                <div class="property-card">
+                    <div class="card-img"><img src="https://images.pexels.com/photos/2505917/pexels-photo-2505917.jpeg?auto=compress&cs=tinysrgb&w=800" alt="mediterranean mansion"></div>
                     <div class="card-content">
                         <div class="price">$6 950 000</div>
-                        <div class="card-title">Mediterranean Palace</div>
-                        <div class="card-location"><i class="fas fa-map-marker-alt"></i> Côte d'Azur, France</div>
-                        <div class="features">
-                            <span><i class="fas fa-bed"></i> 7 beds</span>
-                            <span><i class="fas fa-bath"></i> 8 baths</span>
-                            <span><i class="fas fa-vector-square"></i> 920 m²</span>
-                        </div>
+                        <div class="card-title">Château Azur</div>
+                        <div class="card-location"><i class="fas fa-map-pin"></i> Côte d’Azur, France</div>
+                        <div class="features"><span><i class="fas fa-bed"></i> 7 спален</span><span><i class="fas fa-bath"></i> 8 ванн</span><span><i class="fas fa-arrows-alt"></i> 1260 м²</span></div>
                     </div>
                 </div>
+            </div>
+            <div style="text-align:center; margin-top: 64px;">
+                <button class="btn-luxury" id="catalogBtn">ПОЛНЫЙ КАТАЛОГ > $100M+</button>
             </div>
         </div>
     </section>
 
+    <!-- Преимущества эксклюзив -->
     <section id="amenities">
         <div class="container">
-            <div class="section-sub">Почему выбирают нас</div>
-            <h2 class="section-title fade-up">Безупречный сервис</h2>
+            <div class="section-sub">WHITE GLOVE SERVICE</div>
+            <h2 class="section-title fade-up">Бескомпромиссный уровень</h2>
             <div class="amenities-grid">
-                <div class="amenity-item">
-                    <div class="amenity-icon"><i class="fas fa-gem"></i></div>
-                    <div class="amenity-title">Эксклюзивные объекты</div>
-                    <p>Только приватные листинги и off-market предложения.</p>
-                </div>
-                <div class="amenity-item">
-                    <div class="amenity-icon"><i class="fas fa-concierge-bell"></i></div>
-                    <div class="amenity-title">White Glove Service</div>
-                    <p>Персональный консьерж, юрист, дизайн интерьеров.</p>
-                </div>
-                <div class="amenity-item">
-                    <div class="amenity-icon"><i class="fas fa-globe-americas"></i></div>
-                    <div class="amenity-title">Глобальное присутствие</div>
-                    <p>Нью-Йорк, Лондон, Дубай, Париж, Майами.</p>
-                </div>
+                <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-lock"></i></div><h3>Off-Market сделки</h3><p>Уникальные объекты, недоступные в открытых базах. Только для HNWI клиентов.</p></div>
+                <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-chart-line"></i></div><h3>Доходность 12-18%</h3><p>Инвестиционные резиденции с подтверждённой доходностью и приростом капитала.</p></div>
+                <div class="amenity-card"><div class="amenity-icon"><i class="fas fa-vr-cardboard"></i></div><h3>VR тур & 3D-проекции</h3><p>Иммерсивный просмотр с помощью Unreal Engine и 3D-двойников объектов.</p></div>
             </div>
         </div>
     </section>
 
-    <section>
-        <div class="container">
-            <div class="stats-container" id="statsSection">
-                <div class="stat-item"><div class="stat-number" data-count="28">0</div><div>Лет на рынке</div></div>
-                <div class="stat-item"><div class="stat-number" data-count="342">0</div><div>Эксклюзивных объектов</div></div>
-                <div class="stat-item"><div class="stat-number" data-count="1.8">0</div><div>Миллиардов $ продаж</div></div>
-                <div class="stat-item"><div class="stat-number" data-count="100">0</div><div>Довольных клиентов</div></div>
-            </div>
+    <!-- Статистика с анимацией -->
+    <div class="container">
+        <div class="stats-cinematic" id="statsBlock">
+            <div class="stat-block"><div class="stat-number" data-count="28">0</div><div>ЛЕТ ЭКСПЕРТИЗЫ</div></div>
+            <div class="stat-block"><div class="stat-number" data-count="124">0</div><div>ПРОДАННЫХ ОБЪЕКТОВ >$1M</div></div>
+            <div class="stat-block"><div class="stat-number" data-count="4.2">0</div><div>МИЛЛИАРДА $ ПОРТФЕЛЬ</div></div>
+            <div class="stat-block"><div class="stat-number" data-count="100">0</div><div>VIP КЛИЕНТОВ 100%</div></div>
         </div>
-    </section>
+    </div>
 
+    <!-- Отзывы мирового уровня -->
     <section id="testimonials">
         <div class="container">
-            <div class="section-sub">Client's Stories</div>
-            <h2 class="section-title fade-up">Впечатления резидентов</h2>
-            <div class="testimonials-grid">
-                <div class="testimonial scale-in">
-                    <p>«Безупречный сервис и профессионализм. Нам помогли найти дом мечты в Париже за 2 недели.»</p>
-                    <div class="client-info">
-                        <img class="client-img" src="https://randomuser.me/api/portraits/women/68.jpg" alt="client">
-                        <div><strong>Екатерина М.</strong><br><small>Владелица пентхауса, Париж</small></div>
-                    </div>
-                </div>
-                <div class="testimonial scale-in">
-                    <p>«Специалисты подобрали объект с доходностью 12% годовых. Всё легально, быстро и конфиденциально.»</p>
-                    <div class="client-info">
-                        <img class="client-img" src="https://randomuser.me/api/portraits/men/32.jpg" alt="client">
-                        <div><strong>Александр В.</strong><br><small>Инвестор, Дубай</small></div>
-                    </div>
-                </div>
-                <div class="testimonial scale-in">
-                    <p>«Абсолютная эстетика и роскошь. Агенты нашли виллу, о которой мы даже не мечтали.»</p>
-                    <div class="client-info">
-                        <img class="client-img" src="https://randomuser.me/api/portraits/women/44.jpg" alt="client">
-                        <div><strong>Оливия Л.</strong><br><small>Бутик-отельер, Майами</small></div>
-                    </div>
-                </div>
+            <div class="section-sub">ДОВЕРИЕ, ПОДТВЕРЖДЁННОЕ СДЕЛКАМИ</div>
+            <h2 class="section-title fade-up">Голоса наших резидентов</h2>
+            <div class="testimonial-grid">
+                <div class="testimonial-card"><i class="fas fa-quote-left" style="color:#C5A059; font-size: 28px;"></i><p style="margin-top:20px; font-size:1.1rem;">«Сделка на 8,5 миллионов долларов прошла идеально. Юридическое сопровождение, конфиденциальность — всё на уровне мировых стандартов».</p><div style="margin-top: 32px;"><strong>— Мария К.</strong><br><span style="color:#C5A059;">Основатель Art&Lux Group</span></div></div>
+                <div class="testimonial-card"><i class="fas fa-quote-left" style="color:#C5A059; font-size: 28px;"></i><p style="margin-top:20px; font-size:1.1rem;">«Резиденция в Дубае куплена за 12,2M. Получили окупаемость less than 18 месяцев за счет сдачи в аренду. Брокеры LUXURA — мастера премиум-сделок».</p><div style="margin-top: 32px;"><strong>— Дмитрий А.</strong><br><span style="color:#C5A059;">Семейный офис</span></div></div>
+                <div class="testimonial-card"><i class="fas fa-quote-left" style="color:#C5A059; font-size: 28px;"></i><p style="margin-top:20px; font-size:1.1rem;">«Купили пентхаус в Манхэттене за 6.7M$ через off-market. Невероятный сервис! Эксклюзивные объекты, которых нет у других».</p><div style="margin-top: 32px;"><strong>— Victoria T.</strong><br><span style="color:#C5A059;">CEO, международный холдинг</span></div></div>
             </div>
         </div>
     </section>
 </main>
 
-<footer id="contact">
+<footer id="contact" class="footer">
     <div class="container">
-        <div class="footer-content">
-            <div class="footer-col"><h3>LUXURA<span style="color:#C6A43F;">.</span></h3><p>Элитная недвижимость с душой.</p></div>
-            <div class="footer-col"><h3>Контакты</h3><p><i class="fas fa-phone-alt"></i> +7 (495) 999-33-22</p><p><i class="fas fa-envelope"></i> hello@luxuraestates.com</p></div>
-            <div class="footer-col"><h3>Соцсети</h3><div class="social-links"><a href="#"><i class="fab fa-instagram"></i></a><a href="#"><i class="fab fa-facebook-f"></i></a><a href="#"><i class="fab fa-linkedin-in"></i></a></div></div>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 50px; margin-bottom: 60px;">
+            <div><div class="logo" style="font-size: 38px;">LUXURA</div><p style="margin-top: 20px; max-width: 250px;">Резиденции, которые становятся наследием.</p></div>
+            <div><h4 style="font-weight: 500; margin-bottom: 15px;">КОНТАКТЫ ДЛЯ HNWI</h4><p><i class="fas fa-phone-alt"></i> +41 22 555 9 888</p><p><i class="fas fa-envelope"></i> private@luxura.com</p><p><i class="fas fa-globe"></i> Park Tower, Dubai / Geneva</p></div>
+            <div><h4 style="font-weight: 500; margin-bottom: 15px;">ЭКСКЛЮЗИВНЫЙ ДОСТУП</h4><div class="social-icon"><i class="fab fa-instagram"></i><i class="fab fa-linkedin"></i><i class="fab fa-weixin"></i></div><p style="margin-top: 20px;">Премиум-консультация 24/7</p></div>
         </div>
-        <div class="copyright">© 2025 LUXURA Estates — Премиум сегмент недвижимости.</div>
+        <div style="border-top: 1px solid rgba(197,160,89,0.3); padding-top: 32px; text-align: center; font-size: 0.8rem;">© 2025 LUXURA | Уверенные сделки от $100k до $100M+. Все права защищены.</div>
     </div>
 </footer>
 
 <script>
+    // Регистрация GSAP ScrollTrigger
     gsap.registerPlugin(ScrollTrigger);
-    window.addEventListener('DOMContentLoaded', () => {
-        gsap.from(".hero-subtitle, .hero-title, .hero-desc, .btn-gold", { opacity: 0, y: 40, stagger: 0.2, duration: 1, ease: "power3.out" });
-        gsap.utils.toArray(".property-card, .amenity-item, .testimonial").forEach(el => {
-            gsap.from(el, { scrollTrigger: { trigger: el, start: "top 85%" }, opacity: 0, y: 40, duration: 0.8 });
+
+    // Header эффект
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('header');
+        header.classList.toggle('scrolled', window.scrollY > 40);
+    });
+
+    // Бургер меню
+    const burger = document.getElementById('burger');
+    const navLinks = document.getElementById('navLinks');
+    burger.addEventListener('click', () => navLinks.classList.toggle('active'));
+    document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
+
+    // GSAP Hero entrance
+    const heroTl = gsap.timeline();
+    heroTl.from("#heroSub", { opacity: 0, y: -25, duration: 0.8, ease: "power3.out" })
+          .from("#heroTitle", { opacity: 0, y: 65, duration: 1.2, ease: "back.out(0.6)" }, "-=0.4")
+          .from("#heroDesc", { opacity: 0, y: 30, duration: 0.9 }, "-=0.6")
+          .from("#exploreBtn", { opacity: 0, scale: 0.88, duration: 0.8, ease: "elastic.out(1,0.5)" }, "-=0.4");
+
+    // плавное появление карточек со скроллтриггер
+    gsap.utils.toArray(".property-card, .amenity-card, .testimonial-card").forEach(card => {
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: "top 90%",
+                toggleActions: "play none none reverse",
+            },
+            opacity: 0,
+            y: 48,
+            duration: 0.8,
+            ease: "power2.out"
         });
     });
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
+    // Fade-up intersection observer
+    const fadeEl = document.querySelectorAll('.fade-up');
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(ent => { if(ent.isIntersecting) ent.target.classList.add('visible'); });
     }, { threshold: 0.2 });
-    document.querySelectorAll('.fade-up, .scale-in').forEach(el => observer.observe(el));
+    fadeEl.forEach(el => obs.observe(el));
 
-    // Счётчики
-    const statsObserver = new IntersectionObserver((entries) => {
+    // счетчики статистики
+    const statNumbers = document.querySelectorAll('.stat-number');
+    let counted = false;
+    const statsObserver = new IntersectionObserver((entries, observer) => {
         entries.forEach(entry => {
-            if(entry.isIntersecting) {
-                document.querySelectorAll('.stat-number').forEach(el => {
-                    let target = parseFloat(el.dataset.count), current = 0;
-                    if(target === 1.8){
-                        let cur = 0;
-                        let interval = setInterval(() => { cur += 0.05; if(cur >= 1.8) { el.innerText = '1.8B'; clearInterval(interval); } else el.innerText = cur.toFixed(1) + 'B'; }, 25);
+            if (entry.isIntersecting && !counted) {
+                counted = true;
+                statNumbers.forEach(el => {
+                    const target = parseFloat(el.getAttribute('data-count'));
+                    let current = 0;
+                    const increment = target / 60;
+                    if (target === 4.2) {
+                        let val = 0;
+                        const interval = setInterval(() => {
+                            val += 0.05;
+                            if (val >= 4.2) {
+                                el.innerText = '4.2B';
+                                clearInterval(interval);
+                            } else {
+                                el.innerText = val.toFixed(1) + 'B';
+                            }
+                        }, 24);
                     } else {
-                        let increment = target / 50;
-                        let upd = () => { current += increment; if(current < target) { el.innerText = Math.floor(current); requestAnimationFrame(upd); } else el.innerText = target; };
-                        upd();
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                el.innerText = Math.floor(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                el.innerText = target;
+                            }
+                        };
+                        updateCounter();
                     }
                 });
-                statsObserver.disconnect();
+                observer.disconnect();
             }
         });
     }, { threshold: 0.5 });
-    statsObserver.observe(document.getElementById('statsSection'));
+    statsObserver.observe(document.getElementById('statsBlock'));
 
-    // Header scroll
-    window.addEventListener('scroll', () => document.getElementById('header').classList.toggle('scrolled', window.scrollY > 50));
-    // Burger
-    const burger = document.getElementById('burger'), navLinks = document.getElementById('navLinks');
-    burger.addEventListener('click', () => navLinks.classList.toggle('active'));
-    document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
-    // Smooth scroll
+    // Кнопки скролла + уверенная демонстрация продаж $100k+
+    document.getElementById('exploreBtn').addEventListener('click', () => {
+        document.getElementById('properties').scrollIntoView({ behavior: 'smooth' });
+    });
+    document.getElementById('catalogBtn').addEventListener('click', () => {
+        alert("🗝️ КАТАЛОГ ЭКСКЛЮЗИВНЫХ РЕЗИДЕНЦИЙ (100+ объектов от 350k$ до 95M$).\nЗакрытые показы, сделки любой сложности, полное сопровождение.\nПодтверждённые продажи от $100 000 +");
+    });
+    // плавные якоря
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function(e) {
-            const target = document.querySelector(this.getAttribute('href'));
-            if(target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
+        anchor.addEventListener('click', function(e){
+            const hash = this.getAttribute('href');
+            if(hash === "#" || hash === "") return;
+            const target = document.querySelector(hash);
+            if(target){
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth' });
+            }
         });
     });
-    document.getElementById('heroBtn').addEventListener('click', () => document.getElementById('properties').scrollIntoView({ behavior: 'smooth' }));
 </script>
 </body>
 </html>
