@@ -1,212 +1,844 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premium Site</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Luxury Estates | Элитная недвижимость премиум-класса</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- GSAP & ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<meta name="description" content="Премиум сайт">
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0C10;
+            color: #FFFFFF;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+        /* Кастомный скролл */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1A1D24;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #C6A43F;
+            border-radius: 10px;
+        }
 
-<style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
+        /* Общие классы анимаций (начальные состояния) */
+        .fade-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .fade-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .fade-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .fade-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+        }
+        .fade-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.92);
+            transition: opacity 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.2), transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+        }
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
 
-body {
-  background: linear-gradient(135deg,#0a0a0f,#111827);
-  color: #fff;
-  overflow-x: hidden;
-}
+        /* Контейнер */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
 
-/* Loader */
-#loader {
-  position: fixed;
-  width: 100%;
-  height: 100%;
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
-  font-size: 24px;
-}
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 24px 32px;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            background: transparent;
+        }
+        .header.scrolled {
+            background: rgba(10, 12, 16, 0.96);
+            backdrop-filter: blur(12px);
+            padding: 16px 32px;
+            border-bottom: 1px solid rgba(198, 164, 63, 0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #C6A43F 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: transform 0.3s;
+        }
+        .logo:hover {
+            transform: scale(1.02);
+        }
+        .nav-links {
+            display: flex;
+            gap: 42px;
+            list-style: none;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: #FFFFFF;
+            font-weight: 500;
+            font-size: 16px;
+            letter-spacing: 0.3px;
+            transition: color 0.3s, transform 0.2s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #C6A43F;
+            transition: width 0.3s ease-out;
+        }
+        .nav-links a:hover {
+            color: #C6A43F;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .burger {
+            display: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: white;
+            transition: color 0.3s;
+        }
+        .burger:hover {
+            color: #C6A43F;
+        }
 
-/* Container */
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 20px;
-}
-
-/* Hero */
-.hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-h1 {
-  font-size: 48px;
-  background: linear-gradient(90deg,#00f,#0ff);
-  -webkit-background-clip: text;
-  color: transparent;
-}
-
-p {
-  margin: 20px 0;
-  opacity: 0.8;
-}
-
-/* Button */
-button {
-  padding: 15px 30px;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(45deg,#00f,#0ff);
-  color: white;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px #0ff;
-}
-
-/* Sections */
-.section {
-  padding: 80px 0;
-}
-
-/* Cards */
-.cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.card {
-  flex: 1;
-  min-width: 250px;
-  padding: 20px;
-  border-radius: 15px;
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-}
-
-/* Form */
-input, textarea {
-  width: 100%;
-  padding: 12px;
-  margin-top: 10px;
-  border-radius: 8px;
-  border: none;
-  outline: none;
-}
-
-/* Footer */
-footer {
-  text-align: center;
-  padding: 30px;
-  opacity: 0.5;
-}
-
-/* Mobile */
-@media(max-width:768px){
-  h1 { font-size: 32px; }
-}
-</style>
+        /* Hero Section */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: url('https://images.unsplash.com/photo-1613977257363-707ba9349f7d?q=80&w=2070&auto=format') no-repeat center center/cover;
+            z-index: 1;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.45) 100%);
+            z-index: -1;
+        }
+        .hero-content {
+            max-width: 900px;
+            padding: 0 20px;
+        }
+        .hero-subtitle {
+            font-size: 18px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-weight: 500;
+            color: #C6A43F;
+            margin-bottom: 24px;
+        }
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 70px;
+            line-height: 1.1;
+            font-weight: 700;
+            margin-bottom: 24px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .hero-desc {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        .btn-gold {
+            background: linear-gradient(105deg, #C6A43F 0%, #E4C06E 100%);
+            border: none;
+            padding: 16px 42px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #0A0C10;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 8px 20px rgba(198,164,63,0.3);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: 1px;
+        }
+        .btn-gold:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(198,164,63,0.5);
+            background: linear-gradient(105deg, #D4B14A 0%, #F0D187 100%);
+        }
+        /* Секции общие */
+        section {
+            padding: 100px 0;
+            overflow: hidden;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .section-sub {
+            text-align: center;
+            color: #C6A43F;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            font-size: 14px;
+            margin-bottom: 60px;
+        }
+        /* Карточки недвижимости */
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 40px;
+            margin-top: 20px;
+        }
+        .property-card {
+            background: #12151C;
+            border-radius: 28px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            border: 1px solid rgba(198,164,63,0.15);
+        }
+        .property-card:hover {
+            transform: translateY(-12px);
+            border-color: rgba(198,164,63,0.5);
+            box-shadow: 0 28px 45px rgba(0,0,0,0.3);
+        }
+        .card-img {
+            height: 280px;
+            overflow: hidden;
+        }
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.7s ease;
+        }
+        .property-card:hover .card-img img {
+            transform: scale(1.05);
+        }
+        .card-content {
+            padding: 28px;
+        }
+        .price {
+            font-size: 28px;
+            font-weight: 700;
+            color: #C6A43F;
+            margin-bottom: 12px;
+        }
+        .card-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #B0B5C2;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .features {
+            display: flex;
+            gap: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 18px;
+            margin-top: 8px;
+        }
+        .features span {
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #D1D5DB;
+        }
+        /* Преимущества */
+        .amenities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .amenity-item {
+            text-align: center;
+            padding: 35px 20px;
+            background: rgba(18, 21, 28, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 40px;
+            transition: transform 0.3s, background 0.4s;
+            border: 1px solid rgba(198,164,63,0.2);
+        }
+        .amenity-item:hover {
+            transform: translateY(-8px);
+            background: rgba(198,164,63,0.08);
+            border-color: #C6A43F;
+        }
+        .amenity-icon {
+            font-size: 48px;
+            color: #C6A43F;
+            margin-bottom: 24px;
+        }
+        .amenity-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        /* Статистика */
+        .stats-container {
+            background: linear-gradient(135deg, #12151C 0%, #0A0C10 100%);
+            border-radius: 60px;
+            padding: 60px 40px;
+            margin-top: 40px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            text-align: center;
+            gap: 30px;
+            border: 1px solid rgba(198,164,63,0.25);
+        }
+        .stat-item {
+            flex: 1;
+            min-width: 150px;
+        }
+        .stat-number {
+            font-size: 56px;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            color: #C6A43F;
+            margin-bottom: 10px;
+        }
+        .stat-label {
+            font-size: 16px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.8;
+        }
+        /* Отзывы */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .testimonial {
+            background: #12151C;
+            padding: 32px;
+            border-radius: 32px;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .testimonial:hover {
+            border-color: #C6A43F;
+            transform: scale(1.01);
+        }
+        .testimonial-text {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 24px;
+            font-style: italic;
+        }
+        .client-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .client-img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #C6A43F;
+        }
+        .client-name {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        /* Footer */
+        footer {
+            background: #07090D;
+            padding: 60px 0 30px;
+            border-top: 1px solid rgba(198,164,63,0.2);
+        }
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        .footer-col h3 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            font-family: 'Playfair Display', serif;
+        }
+        .footer-col p, .footer-col a {
+            color: #B0B5C2;
+            line-height: 1.8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .social-links a {
+            font-size: 22px;
+            margin-right: 20px;
+            color: #B0B5C2;
+        }
+        .social-links a:hover {
+            color: #C6A43F;
+        }
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: #7A7F8A;
+            font-size: 14px;
+        }
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-title { font-size: 52px; }
+            .section-title { font-size: 40px; }
+            .stats-container { padding: 40px 20px; }
+            .stat-number { font-size: 44px; }
+        }
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 70%;
+                height: 100vh;
+                background: rgba(10,12,16,0.98);
+                backdrop-filter: blur(24px);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 40px;
+                transition: 0.4s ease-out;
+                z-index: 999;
+                box-shadow: -5px 0 20px rgba(0,0,0,0.4);
+            }
+            .nav-links.active {
+                right: 0;
+            }
+            .burger {
+                display: block;
+                z-index: 1001;
+            }
+            .header, .header.scrolled { padding: 20px 24px; }
+            .hero-title { font-size: 42px; }
+            .container { padding: 0 20px; }
+            .stats-container { flex-direction: column; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 36px; }
+            .btn-gold { padding: 12px 30px; font-size: 16px; }
+            .section-title { font-size: 32px; }
+        }
+    </style>
 </head>
-
 <body>
 
-<div id="loader">Загрузка...</div>
+<header class="header" id="header">
+    <div class="nav container">
+        <div class="logo">LUXURA<span style="color:#C6A43F;">.</span></div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home">Главная</a></li>
+            <li><a href="#properties">Объекты</a></li>
+            <li><a href="#amenities">Преимущества</a></li>
+            <li><a href="#testimonials">Отзывы</a></li>
+            <li><a href="#contact">Контакты</a></li>
+        </ul>
+        <div class="burger" id="burger">
+            <i class="fas fa-bars"></i>
+        </div>
+    </div>
+</header>
 
-<div class="container hero">
-  <h1 class="title">Создаем сайты, которые продают</h1>
-  <p>Премиум дизайн + высокая конверсия</p>
-  <button onclick="scrollToForm()">Оставить заявку</button>
-</div>
+<main>
+    <!-- Hero секция -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <div class="hero-subtitle" id="heroSubtitle">EXCLUSIVE LIVING</div>
+            <h1 class="hero-title" id="heroTitle">Там, где роскошь<br> встречает вдохновение</h1>
+            <p class="hero-desc" id="heroDesc">Элитные резиденции, пентхаусы и виллы премиум-класса в лучших локациях мира. Персональный подход 24/7.</p>
+            <button class="btn-gold" id="heroBtn">Исследовать <i class="fas fa-arrow-right"></i></button>
+        </div>
+    </section>
 
-<div class="container section">
-  <h2>Преимущества</h2>
-  <div class="cards">
-    <div class="card">🚀 Быстрая загрузка</div>
-    <div class="card">💎 Дорогой дизайн</div>
-    <div class="card">📈 Рост продаж</div>
-  </div>
-</div>
+    <!-- Объекты недвижимости -->
+    <section id="properties">
+        <div class="container">
+            <div class="section-sub">Эксклюзивная коллекция</div>
+            <h2 class="section-title fade-up">Престижные резиденции</h2>
+            <div class="properties-grid">
+                <div class="property-card scale-in">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=700&auto=format" alt="Modern Villa">
+                    </div>
+                    <div class="card-content">
+                        <div class="price">$2 850 000</div>
+                        <div class="card-title">Villa Panorama</div>
+                        <div class="card-location"><i class="fas fa-map-marker-alt"></i> Beverly Hills, CA</div>
+                        <div class="features">
+                            <span><i class="fas fa-bed"></i> 5 beds</span>
+                            <span><i class="fas fa-bath"></i> 6 baths</span>
+                            <span><i class="fas fa-vector-square"></i> 580 m²</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="property-card scale-in">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=700&auto=format" alt="Sky Penthouse">
+                    </div>
+                    <div class="card-content">
+                        <div class="price">$4 200 000</div>
+                        <div class="card-title">Sky Penthouse</div>
+                        <div class="card-location"><i class="fas fa-map-marker-alt"></i> Manhattan, NY</div>
+                        <div class="features">
+                            <span><i class="fas fa-bed"></i> 4 beds</span>
+                            <span><i class="fas fa-bath"></i> 5 baths</span>
+                            <span><i class="fas fa-vector-square"></i> 340 m²</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="property-card scale-in">
+                    <div class="card-img">
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=700&auto=format" alt="Mediterranean Mansion">
+                    </div>
+                    <div class="card-content">
+                        <div class="price">$6 950 000</div>
+                        <div class="card-title">Mediterranean Palace</div>
+                        <div class="card-location"><i class="fas fa-map-marker-alt"></i> Côte d'Azur, France</div>
+                        <div class="features">
+                            <span><i class="fas fa-bed"></i> 7 beds</span>
+                            <span><i class="fas fa-bath"></i> 8 baths</span>
+                            <span><i class="fas fa-vector-square"></i> 920 m²</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="container section">
-  <h2>Отзывы</h2>
-  <p>“Сайт реально начал приносить клиентов”</p>
-</div>
+    <!-- Преимущества / Amenities -->
+    <section id="amenities">
+        <div class="container">
+            <div class="section-sub">Почему выбирают нас</div>
+            <h2 class="section-title fade-up">Безупречный сервис <br> и эксклюзивность</h2>
+            <div class="amenities-grid">
+                <div class="amenity-item fade-left">
+                    <div class="amenity-icon"><i class="fas fa-gem"></i></div>
+                    <div class="amenity-title">Эксклюзивные объекты</div>
+                    <p>Только приватные листинги, off-market предложения и элитная недвижимость, недоступная широкому рынку.</p>
+                </div>
+                <div class="amenity-item fade-up">
+                    <div class="amenity-icon"><i class="fas fa-concierge-bell"></i></div>
+                    <div class="amenity-title">White Glove Service</div>
+                    <p>Персональный консьерж, юридическое сопровождение, дизайн интерьеров и полная поддержка.</p>
+                </div>
+                <div class="amenity-item fade-right">
+                    <div class="amenity-icon"><i class="fas fa-globe-americas"></i></div>
+                    <div class="amenity-title">Глобальное присутствие</div>
+                    <p>Резиденции в лучших мегаполисах мира: Нью-Йорк, Лондон, Дубай, Париж, Майами.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<div class="container section" id="form">
-  <h2>Оставить заявку</h2>
-  <input id="name" placeholder="Имя">
-  <input id="phone" placeholder="Телефон">
-  <textarea id="msg" placeholder="Сообщение"></textarea>
-  <button onclick="send()">Отправить</button>
-</div>
+    <!-- Секция статистики с анимированными числами -->
+    <section>
+        <div class="container">
+            <div class="stats-container" id="statsSection">
+                <div class="stat-item">
+                    <div class="stat-number" data-count="28">0</div>
+                    <div class="stat-label">Лет на рынке</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="342">0</div>
+                    <div class="stat-label">Эксклюзивных объектов</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="1.8">0</div>
+                    <div class="stat-label">Миллиардов $ продаж</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" data-count="100">0</div>
+                    <div class="stat-label">Довольных клиентов</div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<footer>
-  © 2026 Premium Site
+    <!-- Отзывы клиентов -->
+    <section id="testimonials">
+        <div class="container">
+            <div class="section-sub">Client's Stories</div>
+            <h2 class="section-title fade-up">Впечатления наших резидентов</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial scale-in">
+                    <p class="testimonial-text">«Безупречный сервис и профессионализм. Нам помогли найти дом мечты в Париже за 2 недели. Огромное спасибо команде LUXURA.»</p>
+                    <div class="client-info">
+                        <img class="client-img" src="https://randomuser.me/api/portraits/women/68.jpg" alt="client">
+                        <div>
+                            <div class="client-name">Екатерина М.</div>
+                            <small>Владелица пентхауса, Париж</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial scale-in">
+                    <p class="testimonial-text">«Обратился за инвестиционной недвижимостью. Специалисты подобрали объект с доходностью 12% годовых. Всё легально, быстро и конфиденциально.»</p>
+                    <div class="client-info">
+                        <img class="client-img" src="https://randomuser.me/api/portraits/men/32.jpg" alt="client">
+                        <div>
+                            <div class="client-name">Александр В.</div>
+                            <small>Инвестор, Дубай</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial scale-in">
+                    <p class="testimonial-text">«Абсолютная эстетика и роскошь. Агенты нашли виллу, о которой мы даже не мечтали. Сопровождение на всех этапах — высший пилотаж!»</p>
+                    <div class="client-info">
+                        <img class="client-img" src="https://randomuser.me/api/portraits/women/44.jpg" alt="client">
+                        <div>
+                            <div class="client-name">Оливия Л.</div>
+                            <small>Бутик-отельер, Майами</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer id="contact">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>LUXURA<span style="color:#C6A43F;">.</span></h3>
+                <p>Элитная недвижимость с душой.<br>Ваш ключ к эксклюзивному образу жизни.</p>
+            </div>
+            <div class="footer-col">
+                <h3>Контакты</h3>
+                <p><i class="fas fa-phone-alt"></i> +7 (495) 999-33-22</p>
+                <p><i class="fas fa-envelope"></i> hello@luxuraestates.com</p>
+                <p><i class="fas fa-map-pin"></i> 45 Rockefeller Plaza, NYC</p>
+            </div>
+            <div class="footer-col">
+                <h3>Социальные сети</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 LUXURA Estates — Премиум сегмент недвижимости. Все права защищены.
+        </div>
+    </div>
 </footer>
 
 <script>
+    // Инициализация GSAP и ScrollTrigger
+    gsap.registerPlugin(ScrollTrigger);
 
-/* Loader */
-window.onload = () => {
-  gsap.to("#loader", {
-    opacity: 0,
-    duration: 1,
-    onComplete: () => {
-      document.getElementById("loader").style.display = "none";
+    // Анимации hero с GSAP при загрузке
+    window.addEventListener('DOMContentLoaded', () => {
+        const tl = gsap.timeline();
+        tl.from("#heroSubtitle", { opacity: 0, y: -30, duration: 0.9, ease: "power3.out" })
+          .from("#heroTitle", { opacity: 0, y: 50, duration: 1, ease: "back.out(0.7)" }, "-=0.5")
+          .from("#heroDesc", { opacity: 0, y: 30, duration: 0.8 }, "-=0.4")
+          .from("#heroBtn", { opacity: 0, scale: 0.9, duration: 0.6, ease: "elastic.out(1, 0.5)" }, "-=0.3");
+
+        // Анимации элементов при скролле через ScrollTrigger (дополнительно к CSS visible)
+        gsap.utils.toArray(".property-card, .amenity-item, .testimonial").forEach((el) => {
+            gsap.from(el, {
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 85%",
+                    toggleActions: "play none none reverse",
+                },
+                opacity: 0,
+                y: 40,
+                duration: 0.8,
+                ease: "power2.out"
+            });
+        });
+        
+        // Плавное появление секций
+        gsap.from(".stats-container", {
+            scrollTrigger: {
+                trigger: ".stats-container",
+                start: "top 80%",
+            },
+            opacity: 0,
+            scale: 0.96,
+            duration: 1,
+        });
+    });
+
+    // Intersection Observer для CSS-классов (fade, scale)
+    const fadeElements = document.querySelectorAll('.fade-up, .fade-left, .fade-right, .scale-in');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2, rootMargin: "0px 0px -20px 0px" });
+    fadeElements.forEach(el => observer.observe(el));
+
+    // Анимация счетчиков (статистика)
+    const statNumbers = document.querySelectorAll('.stat-number');
+    let counted = false;
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !counted) {
+                counted = true;
+                statNumbers.forEach(el => {
+                    const target = parseFloat(el.getAttribute('data-count'));
+                    let current = 0;
+                    const increment = target / 45;
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            if (target === 1.8) {
+                                el.innerText = current.toFixed(1) + 'B';
+                            } else {
+                                el.innerText = Math.floor(current);
+                            }
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            if (target === 1.8) el.innerText = '1.8B';
+                            else el.innerText = target;
+                        }
+                    };
+                    if (target === 1.8) {
+                        let cur = 0;
+                        const interval = setInterval(() => {
+                            cur += 0.05;
+                            if (cur >= 1.8) {
+                                el.innerText = '1.8B';
+                                clearInterval(interval);
+                            } else {
+                                el.innerText = cur.toFixed(1) + 'B';
+                            }
+                        }, 18);
+                    } else {
+                        updateCounter();
+                    }
+                });
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.6 });
+    const statsContainer = document.querySelector('#statsSection');
+    if (statsContainer) statsObserver.observe(statsContainer);
+
+    // Header скролл эффект
+    window.addEventListener('scroll', () => {
+        const header = document.getElementById('header');
+        if (window.scrollY > 50) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+    // Бургер-меню
+    const burger = document.getElementById('burger');
+    const navLinks = document.getElementById('navLinks');
+    burger.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+    });
+    document.querySelectorAll('.nav-links a').forEach(link => {
+        link.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+        });
+    });
+
+    // Плавный скролл к якорям
+    const allLinks = document.querySelectorAll('a[href^="#"]');
+    allLinks.forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href === "#" || href === "") return;
+            const target = document.querySelector(href);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        });
+    });
+
+    // Кнопка "Исследовать" - скролл к объектам
+    const exploreBtn = document.getElementById('heroBtn');
+    if (exploreBtn) {
+        exploreBtn.addEventListener('click', () => {
+            const propertiesSection = document.getElementById('properties');
+            propertiesSection.scrollIntoView({ behavior: 'smooth' });
+        });
     }
-  });
-};
-
-/* Animations */
-gsap.from(".title", {
-  opacity: 0,
-  y: 100,
-  duration: 1.5
-});
-
-/* Scroll */
-function scrollToForm(){
-  document.getElementById("form").scrollIntoView({
-    behavior: "smooth"
-  });
-}
-
-/* Form */
-function send(){
-  let name = document.getElementById("name").value;
-  let phone = document.getElementById("phone").value;
-
-  if(name === "" || phone === ""){
-    alert("Заполни имя и телефон");
-    return;
-  }
-
-  alert("Заявка отправлена!");
-}
-
-/* Parallax */
-window.addEventListener("scroll", () => {
-  document.body.style.backgroundPositionY =
-    window.scrollY * 0.3 + "px";
-});
-
 </script>
-
 </body>
 </html>
